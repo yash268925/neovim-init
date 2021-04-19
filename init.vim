@@ -105,6 +105,7 @@ Plug 'jeroenbourgois/vim-actionscript'
 Plug 'leafgarland/typescript-vim'
 Plug 'cespare/mxml.vim'
 Plug 'rust-lang/rust.vim'
+Plug 'leafOfTree/vim-vue-plugin'
 
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/asyncomplete.vim'
