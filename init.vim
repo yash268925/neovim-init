@@ -257,7 +257,15 @@ lua << EOF
       end
       client.resolved_capabilities.document_formatting = false
       on_attach()
-    end
+    end,
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "javascript.jsx",
+      "typescript",
+      "typescript.tsx",
+      "typescriptreact"
+    }
   })
 
   lspconfig.intelephense.setup({
