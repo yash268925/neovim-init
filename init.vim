@@ -87,6 +87,7 @@ call plug#begin()
 Plug 'itchyny/lightline.vim'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'kassio/neoterm'
+Plug 'ojroques/vim-oscyank'
 
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 Plug 'cocopon/iceberg.vim'
@@ -159,6 +160,10 @@ colorscheme iceberg
 " make popup to transparent
 set pumblend=20
 set winblend=20
+
+" vim-oscyank settings
+let g:oscyank_term = 'kitty'
+autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
 
 " === Agit keymaps ===
 autocmd FileType agit call s:agit_keymaps()
