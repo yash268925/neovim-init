@@ -20,6 +20,11 @@ set tabstop=4
 set softtabstop=2
 set expandtab
 
+augroup filetypeIndent
+  autocmd!
+  autocmd BufNewFile,BufRead Makefile setlocal noexpandtab shiftwidth=4 softtabstop=4
+augroup end
+
 syntax on
 
 nnoremap s <Nop>
@@ -97,6 +102,7 @@ Plug 'taohexxx/lightline-buffer'
 Plug 'tpope/vim-fugitive'
 Plug 'cohama/agit.vim'
 Plug 'airblade/vim-gitgutter'
+Plug 'rhysd/conflict-marker.vim'
 
 Plug 'editorconfig/editorconfig-vim'
 
@@ -161,6 +167,9 @@ colorscheme iceberg
 set pumblend=20
 set winblend=20
 
+" set html_indent_script1 to 0
+let g:html_indent_script1="auto"
+
 " vim-oscyank settings
 let g:oscyank_term = 'kitty'
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
@@ -194,6 +203,10 @@ set showtabline=2
 
 " === vaffle ===
 command! -nargs=0 Vc :call vaffle#init(expand('%:p:h'))
+" ==========
+
+" === editorconfig ===
+au FileType gitcommit let b:EditorConfig_disable = 1
 " ==========
 
 " === nvim-lsp ===
@@ -280,7 +293,16 @@ lua << EOF
         files = {
           maxSize = 3200000;
         },
-        stubs = { "standard", "wordpress" }
+        stubs = { "standard", "superglobals", "session", "wordpress" },
+        diagnostics = {
+          undefinedClassConstants = false,
+          undefinedConstants = false,
+          undefinedFunctions = false,
+          undefinedMethods = false,
+          undefinedProperties = false,
+          undefinedSymbols = false,
+          undefinedTypes = false
+        }
       }
     }
   })
