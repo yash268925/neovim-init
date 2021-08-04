@@ -73,6 +73,15 @@ tnoremap <C-w>n <C-\><C-n>
 " re-syntax
 nnoremap <C-s> <Esc>:syntax sync fromstart<CR>
 
+" load additional scripts
+function! s:load_additional(name)
+  let file = expand('~/.config/nvim/' . a:name)
+  if filereadable(file)
+    source `=file`
+  endif
+endfunction
+call s:load_additional('functions.vim')
+
 " load project local vimrc
 augroup vimrc-local
   autocmd!
@@ -97,7 +106,8 @@ Plug 'ojroques/vim-oscyank'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 Plug 'cocopon/iceberg.vim'
 Plug 'cocopon/vaffle.vim'
-Plug 'taohexxx/lightline-buffer'
+Plug 'mengelbrecht/lightline-bufferline'
+Plug 'ryanoasis/vim-devicons'
 
 Plug 'tpope/vim-fugitive'
 Plug 'cohama/agit.vim'
@@ -108,15 +118,15 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'othree/html5.vim'
 Plug 'cakebaker/scss-syntax.vim'
-Plug 'jeroenbourgois/vim-actionscript'
+"Plug 'jeroenbourgois/vim-actionscript'
 Plug 'leafgarland/typescript-vim'
-Plug 'cespare/mxml.vim'
+"Plug 'cespare/mxml.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'leafOfTree/vim-vue-plugin'
 
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
+"Plug 'prabirshrestha/async.vim'
+"Plug 'prabirshrestha/asyncomplete.vim'
+"Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'nvim-lua/diagnostic-nvim'
@@ -128,10 +138,8 @@ call plug#end()
 let g:lightline = {
   \ 'colorscheme': 'iceberg',
   \ 'tabline': {
-  \   'left': [ [ 'bufferinfo' ],
-  \             [ 'separator' ],
-  \             [ 'bufferbefore', 'buffercurrent', 'bufferafter' ], ],
-  \   'right': [ [ 'close' ], ],
+  \   'left': [[ 'buffers' ]],
+  \   'right': [],
   \ },
   \ 'active': {
   \   'left': [ [ 'mode', 'paste' ],
@@ -142,14 +150,10 @@ let g:lightline = {
   \   'bufferinfo': 'lightline#buffer#bufferinfo',
   \ },
   \ 'component_expand': {
-  \   'buffercurrent': 'lightline#buffer#buffercurrent',
-  \   'bufferbefore': 'lightline#buffer#bufferbefore',
-  \   'bufferafter': 'lightline#buffer#bufferafter',
+  \    'buffers': 'lightline#bufferline#buffers'
   \ },
   \ 'component_type': {
-  \   'buffercurrent': 'tabsel',
-  \   'bufferbefore': 'raw',
-  \   'bufferafter': 'raw',
+  \    'buffers': 'tabsel'
   \ },
   \ 'component': {
   \   'separator': '',
@@ -196,9 +200,18 @@ nnoremap sQ :<C-u>Sayonara!<CR>
 let g:sayonara_confirm_quit=1
 " ==========
 
-" === lightline-buffer settings ===
+" === lightline-bufferline settings ===
 set hidden
 set showtabline=2
+
+nnoremap <Left> :bprev<CR>
+nnoremap <Right> :bnext<CR>
+
+let g:lightline#bufferline#show_number=1
+let g:lightline#bufferline#enable_devicons=1
+let g:lightline#bufferline#unicode_symbols=1
+let g:lightline#bufferline#filter_by_tabpage=1
+let g:lightline#bufferline#unnamed='[No Name]'
 " ==========
 
 " === vaffle ===
@@ -224,6 +237,35 @@ lua << EOF
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {noremap = true, silent = true})
     require('completion').on_attach(client)
+    vim.lsp.handlers['textDocument/publishDiagnostics'] =
+      function(_, _, params, client_id, _)
+        local config = {
+          underline = true,
+          virtual_text = true,
+          signs = true,
+          update_in_insert = false,
+        }
+        local uri = params.uri
+        local bufnr = vim.uri_to_bufnr(uri)
+
+        if not bufnr then
+          return
+        end
+
+        local diagnostics = params.diagnostics
+
+        for i, v in ipairs(diagnostics) do
+          diagnostics[i].message = string.format("%s: %s", v.source, v.message)
+        end
+
+        vim.lsp.diagnostic.save(diagnostics, bufnr, client_id)
+
+        if not vim.api.nvim_buf_is_loaded(bufnr) then
+          return
+        end
+
+        vim.lsp.diagnostic.display(diagnostics, bufnr, client_id, config)
+      end
   end
 
   local eslint = {
@@ -293,7 +335,80 @@ lua << EOF
         files = {
           maxSize = 3200000;
         },
-        stubs = { "standard", "superglobals", "session", "wordpress" },
+        stubs = {
+          "apache",
+          "bcmath",
+          "bz2",
+          "calendar",
+          "com_dotnet",
+          "Core",
+          "ctype",
+          "curl",
+          "date",
+          "dba",
+          "dom",
+          "enchant",
+          "exif",
+          "FFI",
+          "fileinfo",
+          "filter",
+          "fpm",
+          "ftp",
+          "gd",
+          "gettext",
+          "gmp",
+          "hash",
+          "iconv",
+          "imap",
+          "intl",
+          "json",
+          "ldap",
+          "libxml",
+          "mbstring",
+          "meta",
+          "mysqli",
+          "oci8",
+          "odbc",
+          "openssl",
+          "pcntl",
+          "pcre",
+          "PDO",
+          "pdo_ibm",
+          "pdo_mysql",
+          "pdo_pgsql",
+          "pdo_sqlite",
+          "pgsql",
+          "Phar",
+          "posix",
+          "pspell",
+          "readline",
+          "Reflection",
+          "session",
+          "shmop",
+          "SimpleXML",
+          "snmp",
+          "soap",
+          "sockets",
+          "sodium",
+          "SPL",
+          "sqlite3",
+          "standard",
+          "superglobals",
+          "sysvmsg",
+          "sysvsem",
+          "sysvshm",
+          "tidy",
+          "tokenizer",
+          "wordpress",
+          "xml",
+          "xmlreader",
+          "xmlrpc",
+          "xmlwriter",
+          "xsl",
+          "Zend OPcache",
+          "zip",
+          "zlib"
+        },
         diagnostics = {
           undefinedClassConstants = false,
           undefinedConstants = false,
