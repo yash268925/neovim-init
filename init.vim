@@ -118,18 +118,10 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'othree/html5.vim'
 Plug 'cakebaker/scss-syntax.vim'
-"Plug 'jeroenbourgois/vim-actionscript'
 Plug 'leafgarland/typescript-vim'
-"Plug 'cespare/mxml.vim'
 Plug 'rust-lang/rust.vim'
-Plug 'leafOfTree/vim-vue-plugin'
 
-"Plug 'prabirshrestha/async.vim'
-"Plug 'prabirshrestha/asyncomplete.vim'
-"Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
-Plug 'nvim-lua/diagnostic-nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
@@ -222,251 +214,70 @@ command! -nargs=0 Vc :call vaffle#init(expand('%:p:h'))
 au FileType gitcommit let b:EditorConfig_disable = 1
 " ==========
 
-" === nvim-lsp ===
-set completeopt=menuone,noinsert,noselect
+" === coc.nvim ===
+set updatetime=300
 set shortmess+=c
 
-let g:vimsyn_embed='lPr'
-let g:diagnostic_enable_underline=1
-let g:diagnostic_show_sign=99
-lua << EOF
-  local lspconfig = require('lspconfig')
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-  local on_attach = function (client, bufnr)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {noremap = true, silent = true})
-    require('completion').on_attach(client)
-    vim.lsp.handlers['textDocument/publishDiagnostics'] =
-      function(_, _, params, client_id, _)
-        local config = {
-          underline = true,
-          virtual_text = true,
-          signs = true,
-          update_in_insert = false,
-        }
-        local uri = params.uri
-        local bufnr = vim.uri_to_bufnr(uri)
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-        if not bufnr then
-          return
-        end
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
 
-        local diagnostics = params.diagnostics
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-        for i, v in ipairs(diagnostics) do
-          diagnostics[i].message = string.format("%s: %s", v.source, v.message)
-        end
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
-        vim.lsp.diagnostic.save(diagnostics, bufnr, client_id)
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-        if not vim.api.nvim_buf_is_loaded(bufnr) then
-          return
-        end
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
 
-        vim.lsp.diagnostic.display(diagnostics, bufnr, client_id, config)
-      end
-  end
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
-  local eslint = {
-    lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
-    lintStdin = true,
-    lintFormats = {"%f:%l:%c: %m"},
-    lintIgnoreExitCode = true,
-    formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
-    formatStdin = true
-  }
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
 
-  lspconfig.efm.setup({
-    on_attach = function(client)
-      client.resolved_capabilities.document_formatting = true
-      client.resolved_capabilities.goto_definition = false
-      on_attach()
-    end,
-    root_dir = function(fname)
-      return lspconfig.util.find_node_modules_ancestor(fname) or vim.loop.os_homedir()
-    end,
-    settings = {
-      languages = {
-        javascript = {eslint},
-        javascriptreact = {eslint},
-        ["javascript.jsx"] = {eslint},
-        typescript = {eslint},
-        ["typescript.tsx"] = {eslint},
-        typescriptreact = {eslint},
-        vue = {eslint}
-      }
-    },
-    filetypes = {
-      "javascript",
-      "javascriptreact",
-      "javascript.jsx",
-      "typescript",
-      "typescript.tsx",
-      "typescriptreact",
-      "vue"
-    }
-  })
+" Mappings for CoCList
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-  lspconfig.vimls.setup({ on_attach = on_attach })
-
-  lspconfig.tsserver.setup({
-    on_attach = function(client)
-      if client.config.flags then
-        client.config.flags.allow_incremental_sync = true
-      end
-      client.resolved_capabilities.document_formatting = false
-      on_attach()
-    end,
-    filetypes = {
-      "javascript",
-      "javascriptreact",
-      "javascript.jsx",
-      "typescript",
-      "typescript.tsx",
-      "typescriptreact"
-    }
-  })
-
-  lspconfig.intelephense.setup({
-    on_attach = on_attach,
-    settings = {
-      intelephense = {
-        files = {
-          maxSize = 3200000;
-        },
-        stubs = {
-          "apache",
-          "bcmath",
-          "bz2",
-          "calendar",
-          "com_dotnet",
-          "Core",
-          "ctype",
-          "curl",
-          "date",
-          "dba",
-          "dom",
-          "enchant",
-          "exif",
-          "FFI",
-          "fileinfo",
-          "filter",
-          "fpm",
-          "ftp",
-          "gd",
-          "gettext",
-          "gmp",
-          "hash",
-          "iconv",
-          "imap",
-          "intl",
-          "json",
-          "ldap",
-          "libxml",
-          "mbstring",
-          "meta",
-          "mysqli",
-          "oci8",
-          "odbc",
-          "openssl",
-          "pcntl",
-          "pcre",
-          "PDO",
-          "pdo_ibm",
-          "pdo_mysql",
-          "pdo_pgsql",
-          "pdo_sqlite",
-          "pgsql",
-          "Phar",
-          "posix",
-          "pspell",
-          "readline",
-          "Reflection",
-          "session",
-          "shmop",
-          "SimpleXML",
-          "snmp",
-          "soap",
-          "sockets",
-          "sodium",
-          "SPL",
-          "sqlite3",
-          "standard",
-          "superglobals",
-          "sysvmsg",
-          "sysvsem",
-          "sysvshm",
-          "tidy",
-          "tokenizer",
-          "wordpress",
-          "xml",
-          "xmlreader",
-          "xmlrpc",
-          "xmlwriter",
-          "xsl",
-          "Zend OPcache",
-          "zip",
-          "zlib"
-        },
-        diagnostics = {
-          undefinedClassConstants = false,
-          undefinedConstants = false,
-          undefinedFunctions = false,
-          undefinedMethods = false,
-          undefinedProperties = false,
-          undefinedSymbols = false,
-          undefinedTypes = false
-        }
-      }
-    }
-  })
-
-  lspconfig.vuels.setup({
-    on_attach = on_attach,
-    init_options = {
-      config = {
-        css = {},
-        emmet = {},
-        html = {
-          suggest = {}
-        },
-        javascript = {
-          format = {}
-        },
-        stylusSupremacy = {},
-        typescript = {
-          format = {}
-        },
-        vetur = {
-          completion = {
-            autoImport = true,
-            tagCasing = "kebab",
-            useScaffoldSnippets = false
-          },
-          format = {
-            defaultFormatter = {
-              js = "none",
-              ts = "none"
-            },
-            defaultFormatterOptions = {},
-            scriptInitialIndent = false,
-            styleInitialIndent = false
-          },
-          useWorkspaceDependencies = true,
-          validation = {
-            script = true,
-            style = true,
-            template = true
-          },
-          experimental = {
-            templateInterpolationService = true
-          }
-        }
-      }
-    }
-  })
-
-  vim.cmd('command Fix lua vim.lsp.buf.formatting()')
-EOF
 " ==========
