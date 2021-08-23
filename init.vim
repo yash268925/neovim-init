@@ -108,6 +108,7 @@ Plug 'cocopon/iceberg.vim'
 Plug 'cocopon/vaffle.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'ryanoasis/vim-devicons'
+Plug 'gelguy/wilder.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'tpope/vim-fugitive'
 Plug 'cohama/agit.vim'
@@ -122,6 +123,9 @@ Plug 'leafgarland/typescript-vim'
 Plug 'rust-lang/rust.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'tyru/eskk.vim'
+Plug 'tyru/skkdict.vim'
 
 call plug#end()
 
@@ -280,4 +284,32 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+" ==========
+
+" === eskk.vim ===
+let g:eskk#directory = "~/.config/eskk"
+let g:eskk#dictionary = { 'path': "~/.config/eskk/my_jisyo", 'sorted': 1, 'encoding': 'utf-8',}
+let g:eskk#large_dictionary = {'path': "~/.config/eskk/SKK-JISYO.L", 'sorted': 1, 'encoding': 'euc-jp',}
+
+let g:eskk#kakutei_when_unique_candidate = 1
+let g:eskk#enable_completion = 1
+let g:eskk#keep_state = 1
+let g:eskk#egg_like_newline = 1
+
+let g:eskk#marker_henkan = "[変換]"
+let g:eskk#marker_henkan_select = "[選択]"
+let g:eskk#marker_okuri = "[送り]"
+let g:eskk#marker_jisyo_touroku = "[辞書]"
+" ==========
+
+" === wilder.nvim ===
+call wilder#setup({'modes': [':', '/', '?']})
+call wilder#set_option('renderer', wilder#popupmenu_renderer({
+      \ 'highlighter': [
+      \   wilder#basic_highlighter(),
+      \ ],
+      \ 'left': [
+      \   wilder#popupmenu_devicons(),
+      \ ],
+      \ }))
 " ==========
