@@ -95,6 +95,13 @@ function! s:vimrc_local(loc)
   endfor
 endfunction
 
+function! FetchSKKDict(info)
+  if a:info.status == 'installed'
+    call system('mkdir -p ~/.config/eskk')
+    call system('cd ~/.config/eskk && curl -sL http://openlab.jp/skk/dic/SKK-JISYO.L.gz | gzip -d > SKK-JISYO.L')
+  endif
+endfunction
+
 " load global plugins
 call plug#begin()
 
@@ -117,17 +124,19 @@ Plug 'rhysd/conflict-marker.vim'
 
 Plug 'editorconfig/editorconfig-vim'
 
-Plug 'othree/html5.vim'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'rust-lang/rust.vim'
+Plug 'othree/html5.vim', { 'for': ['html', 'vue'] }
+Plug 'cakebaker/scss-syntax.vim', { 'for': ['scss', 'vue'] }
+Plug 'leafgarland/typescript-vim', { 'for': ['typescript', 'vue'] }
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
-Plug 'tyru/eskk.vim'
+Plug 'tyru/eskk.vim', { 'do': function('FetchSKKDict') }
 Plug 'tyru/skkdict.vim'
 
 call plug#end()
+
+colorscheme iceberg
 
 " use iceberg colorscheme with lightline
 " use FugitiveHead with lightline
@@ -160,8 +169,6 @@ let g:lightline = {
 set termguicolors
 set cursorline
 
-colorscheme iceberg
-
 
 " make popup to transparent
 set pumblend=20
@@ -182,10 +189,12 @@ function! s:agit_keymaps()
 endfunction
 " ==========
 
+" === Fugitive ===
+autocmd FileType fugitivestatus nmap <buffer> q gq
+" ==========
+
 " === neoterm settings ===
 let g:neoterm_autoscroll=1
-let g:neoterm_size=20
-let g:neoterm_fixedsize=1
 let g:neoterm_default_mod='bo'
 " ==========
 
@@ -222,20 +231,6 @@ au FileType gitcommit let b:EditorConfig_disable = 1
 set updatetime=300
 set shortmess+=c
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -266,7 +261,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
 
-" Mappings for CoCList
+" Mappings for CocList
 " Show all diagnostics.
 nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
@@ -284,6 +279,19 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+vmap <C-i> <Plug>(coc-snippets-select)
+
 " ==========
 
 " === eskk.vim ===
@@ -293,8 +301,9 @@ let g:eskk#large_dictionary = {'path': "~/.config/eskk/SKK-JISYO.L", 'sorted': 1
 
 let g:eskk#kakutei_when_unique_candidate = 1
 let g:eskk#enable_completion = 1
-let g:eskk#keep_state = 1
+let g:eskk#keep_state = 0
 let g:eskk#egg_like_newline = 1
+let g:eskk#egg_like_newline_completion = 1
 
 let g:eskk#marker_henkan = "[変換]"
 let g:eskk#marker_henkan_select = "[選択]"
