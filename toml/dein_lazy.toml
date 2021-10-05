@@ -97,6 +97,7 @@ repo = 'vim-denops/denops.vim'
 [[plugins]]
 repo = 'lambdalisue/guise.vim'
 depends = 'denops.vim'
+on_source = 'neoterm'
 
 [[plugins]]
 repo = 'ryanoasis/vim-devicons'
@@ -152,9 +153,11 @@ hook_add = '''
 
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
+on_event = 'BufFilePre'
 
 [[plugins]]
 repo = 'rhysd/conflict-marker.vim'
+on_event = 'BufFilePre'
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
@@ -167,6 +170,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'editorconfig/editorconfig-vim'
+on_event = 'BufFilePre'
 
 # syntax plugins ===============================================================
 
