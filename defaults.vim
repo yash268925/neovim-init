@@ -79,3 +79,6 @@ set winblend=20
 
 " set html_indent_script1 to 0
 let g:html_indent_script1="zero"
+
+" set gui environment
+set guifont=PlemolJP\ Console\ NF:h10

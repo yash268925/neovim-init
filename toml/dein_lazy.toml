@@ -1,7 +1,8 @@
 # theme =======================================================================
 
 [[plugins]]
-repo = 'cocopon/iceberg.vim'
+repo = 'yash268925/iceberg.vim'
+rev = 'support-nvim-treesitter'
 on_event = 'VimEnter'
 hook_source = '''
   colorscheme iceberg
@@ -83,10 +84,10 @@ on_cmd = ['BufExplorer']
 repo = 'mhinz/vim-sayonara'
 on_cmd = ['Sayonara']
 hook_add = '''
+  nnoremap sa :<C-u>Sayonara<CR>
   nnoremap sq :<C-u>Sayonara!<CR>
-  nnoremap sQ :<C-u>Sayonara<CR>
 
-  let g:sayonara_confirm_quit=0
+  let g:sayonara_confirm_quit=1
 '''
 
 # utils ========================================================================
@@ -138,6 +139,14 @@ hook_source = '''
 repo = 'kassio/neoterm'
 on_event = 'CmdlineEnter'
 
+[[plugins]]
+repo = 'ojroques/vim-oscyank'
+on_if = '$SSH_CONNECTION != ""'
+hook_add = '''
+  let g:oscyank_term = 'kitty'
+  autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
+'''
+
 # git ==========================================================================
 
 [[plugins]]
@@ -172,24 +181,12 @@ hook_add = '''
 repo = 'editorconfig/editorconfig-vim'
 on_event = 'BufFilePre'
 
-# syntax plugins ===============================================================
+# other ========================================================================
 
 [[plugins]]
-repo = 'cespare/vim-toml'
-on_ft = ['toml']
-
-[[plugins]]
-repo = 'othree/html5.vim'
-on_ft = ['html', 'vue']
-
-[[plugins]]
-repo = 'cakebaker/scss-syntax.vim'
-on_ft = ['scss', 'vue']
-
-[[plugins]]
-repo = 'leafgarland/typescript-vim'
-on_ft = ['typescript', 'vue']
-
-[[plugins]]
-repo = 'rust-lang/rust.vim'
-on_ft = ['rust']
+repo = 'kat0h/bufpreview.vim'
+on_ft = ['markdown', 'pandoc.markdown', 'rmd']
+depends = 'denops.vim'
+hook_add = '''
+  let g:bufpreview_server_port=54321
+'''
