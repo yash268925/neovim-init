@@ -9,6 +9,12 @@ hook_source = '''
 '''
 
 [[plugins]]
+repo = 'vim-denops/denops.vim'
+
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'
+
+[[plugins]]
 repo = 'cocopon/vaffle.vim'
 depends = ['vim-devicons']
 on_event = 'VimEnter'
@@ -72,3 +78,130 @@ EOF
 
 [[plugins]]
 repo = 'cocopon/pgmnt.vim'
+
+[[plugins]]
+repo = 'Shougo/pum.vim'
+hook_add = '''
+  inoremap <Tab>      <Cmd>call pum#map#insert_relative(+1)<CR>
+  inoremap <S-Tab>    <Cmd>call pum#map#insert_relative(-1)<CR>
+  inoremap <C-n>      <Cmd>call pum#map#insert_relative(+1)<CR>
+  inoremap <C-p>      <Cmd>call pum#map#insert_relative(-1)<CR>
+  inoremap <C-y>      <Cmd>call pum#map#confirm()<CR>
+  inoremap <C-e>      <Cmd>call pum#map#cancel()<CR>
+  inoremap <PageDown> <Cmd>call pum#map#insert_relative_page(+1)<CR>
+  inoremap <PageUp>   <Cmd>call pum#map#insert_relative_page(-1)<CR>
+
+  call ddc#custom#patch_global('completionMenu', 'pum.vim')
+
+  call ddc#custom#patch_global('autoCompleteEvents', [
+    \ 'InsertEnter', 'TextChangedI', 'TextChangedP',
+    \ 'CmdlineEnter', 'CmdlineChanged',
+    \ ])
+
+  nnoremap :       <Cmd>call CommandlinePre()<CR>:
+
+  function! CommandlinePre() abort
+    " Note: It disables default command line completion!
+    cnoremap <expr> <Tab>
+    \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1)<CR>' :
+    \ ddc#manual_complete()
+    cnoremap <S-Tab> <Cmd>call pum#map#insert_relative(-1)<CR>
+    cnoremap <C-n>   <Cmd>call pum#map#insert_relative(+1)<CR>
+    cnoremap <C-p>   <Cmd>call pum#map#insert_relative(-1)<CR>
+    cnoremap <C-y>   <Cmd>call pum#map#confirm()<CR>
+    cnoremap <C-e>   <Cmd>call pum#map#cancel()<CR>
+
+    " Overwrite sources
+    let s:prev_buffer_config = ddc#custom#get_buffer()
+    call ddc#custom#patch_buffer('sources',
+            \ ['cmdline', 'cmdline-history', 'around'])
+
+    autocmd User DDCCmdlineLeave ++once call CommandlinePost()
+
+    " Enable command line completion
+    call ddc#enable_cmdline_completion()
+    call ddc#enable()
+  endfunction
+  function! CommandlinePost() abort
+    " Restore sources
+    call ddc#custom#set_buffer(s:prev_buffer_config)
+    cunmap <Tab>
+  endfunction
+'''
+
+[[plugins]]
+repo = 'Shougo/ddc.vim'
+depends = ['denops.vim', 'pum.vim']
+hook_add = '''
+  inoremap <silent><expr> <TAB>
+      \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1)<CR>' :
+      \ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
+      \ '<TAB>' : ddc#manual_complete()
+
+  call ddc#custom#patch_global('sources', ['skkeleton', 'nvim-lsp', 'around', 'file'])
+  call ddc#custom#patch_global('sourceOptions', {
+    \ '_': {
+    \   'matchers': ['matcher_head'],
+    \   'sorters': ['sorter_rank'],
+    \ },
+    \ 'skkeleton': {
+    \   'mark': 'skkeleton',
+    \   'matchers': ['skkeleton'],
+    \   'sorters': []
+    \ },
+    \ 'around': { 'mark': 'A' },
+    \ 'file': {
+    \   'mark': 'F',
+    \   'isVolatile': v:true,
+    \   'forceCompletionPattern': '\S/\S*',
+    \ },
+    \ 'nvim-lsp': {
+    \   'mark': 'LSP',
+    \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
+    \ },
+    \ 'cmdline': {
+    \   'mark': 'vim',
+    \ },
+    \ 'cmdline-history': {
+    \   'mark': 'history',
+    \ },
+    \ })
+
+  call ddc#custom#patch_global('sourceParams', {
+    \ 'around':  { 'maxSize': 500 },
+    \ 'file':    { 'smartCase': v:true },
+    \ })
+
+  call ddc#enable()
+'''
+
+[[plugins]]
+repo = 'Shougo/ddc-matcher_head'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-sorter_rank'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'LumaKernel/ddc-file'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-nvim-lsp'
+on_source = 'ddc.vim'
+
+
+[[plugins]]
+repo = 'Shougo/ddc-around'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-cmdline'
+depends = ['denops.vim', 'ddc.vim']
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-cmdline-history'
+depends = ['denops.vim', 'ddc.vim']
+on_source = 'ddc.vim'

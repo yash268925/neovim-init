@@ -11,6 +11,7 @@ set hlsearch
 set list
 set listchars=eol:$,tab:>-,space:.
 set wildignorecase
+set wildoptions+=pum
 set number relativenumber
 set noequalalways
 
