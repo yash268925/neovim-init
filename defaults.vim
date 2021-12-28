@@ -12,6 +12,7 @@ set list
 set listchars=eol:$,tab:>-,space:.
 set wildignorecase
 set number relativenumber
+set noequalalways
 
 " project default setting
 " overwrite with .vimrc.local in some Projects

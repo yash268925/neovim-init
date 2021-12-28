@@ -2,7 +2,6 @@
 
 [[plugins]]
 repo = 'yash268925/iceberg.vim'
-rev = 'support-nvim-treesitter'
 on_event = 'VimEnter'
 hook_source = '''
   colorscheme iceberg
