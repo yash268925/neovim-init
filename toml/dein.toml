@@ -141,6 +141,8 @@ hook_add = '''
   call ddc#custom#patch_global('sources', ['skkeleton', 'nvim-lsp', 'around', 'file'])
   call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
+    \   'ignoreCase': v:true,
+    \   'minAutoCompleteLength': 1,
     \   'matchers': ['matcher_head'],
     \   'sorters': ['sorter_rank'],
     \ },
@@ -168,8 +170,8 @@ hook_add = '''
     \ })
 
   call ddc#custom#patch_global('sourceParams', {
-    \ 'around':  { 'maxSize': 500 },
-    \ 'file':    { 'smartCase': v:true },
+    \ 'around':   { 'maxSize': 500 },
+    \ 'file':     { 'smartCase': v:true },
     \ })
 
   call ddc#enable()
@@ -189,8 +191,8 @@ on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-nvim-lsp'
+depends = ['nvim-lspconfig', 'denops.vim', 'ddc.vim']
 on_source = 'ddc.vim'
-
 
 [[plugins]]
 repo = 'Shougo/ddc-around'

@@ -55,7 +55,7 @@ nnoremap t; t
 nnoremap t <Nop>
 nnoremap to :<C-u>edit<Space>
 nnoremap tt :<C-u>tabnew<Space>
-nnoremap <expr> tO ':<C-u>edit ' . GetRelativePath()
+nnoremap <expr> tO ':<C-u>edit ' . expand('%:h')
 nnoremap <expr> tT ':<C-u>tabnew ' . GetRelativePath()
 nnoremap ts :<C-u>split<Space>
 nnoremap <expr> tS ':<C-u>split ' . GetRelativePath()

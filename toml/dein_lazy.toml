@@ -94,7 +94,7 @@ hook_add = '''
   let g:lightline#bufferline#show_number=1
   let g:lightline#bufferline#enable_devicons=1
   let g:lightline#bufferline#unicode_symbols=1
-  let g:lightline#bufferline#filter_by_tabpage=1
+  let g:lightline#bufferline#filter_by_tabpage=0
   let g:lightline#bufferline#unnamed='[No Name]'
 '''
 
