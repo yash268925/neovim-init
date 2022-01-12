@@ -32,15 +32,32 @@ repo = 'nvim-treesitter/nvim-treesitter'
 hook_add = '''
   lua << EOF
   require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
-    additional_vim_regex_highlighting = false,
+    ensure_installed = {
+      'javascript',
+      'typescript',
+      'tsx',
+      'bash',
+      'css',
+      'scss',
+      'rust',
+      'markdown',
+      'lua',
+      'html',
+      'json',
+      'php',
+      'java',
+      'make',
+      'json5',
+      'vim',
+      'toml',
+      'vue',
+    },
     highlight = {
       enable = true,
-      -- disable = { "html", "typescript", "vue" },
+      additional_vim_regex_highlighting = false,
     },
     indent = {
       enable = true,
-      -- disable = { "html", "typescript", "vue" },
     }
   }
 EOF
