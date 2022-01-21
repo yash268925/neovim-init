@@ -1,5 +1,3 @@
-# theme =======================================================================
-
 [[plugins]]
 repo = 'yash268925/iceberg.vim'
 on_event = 'VimEnter'
@@ -9,7 +7,8 @@ hook_source = '''
   set cursorline
 '''
 
-# input method ================================================================
+# [[plugins]]
+# repo = 'cocopon/pgmnt.vim'
 
 [[plugins]]
 repo = 'vim-skk/skkeleton'
@@ -42,7 +41,7 @@ hook_add = '''
   ]]
 EOF
 '''
-hook_source = '''
+hook_post_source = '''
   call skkeleton#config({
     \ 'eggLikeNewline': v:true,
     \ 'globalJisyo': $HOME . '/.skk/SKK-JISYO.L',
@@ -52,8 +51,6 @@ hook_source = '''
     \ })
 
 '''
-
-# status =======================================================================
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'
@@ -98,8 +95,6 @@ hook_add = '''
   let g:lightline#bufferline#unnamed='[No Name]'
 '''
 
-# buffer =======================================================================
-
 [[plugins]]
 repo = 'jlanzarotta/bufexplorer'
 on_cmd = ['BufExplorer']
@@ -114,44 +109,10 @@ hook_add = '''
   let g:sayonara_confirm_quit=1
 '''
 
-# utils ========================================================================
-
 [[plugins]]
 repo = 'lambdalisue/guise.vim'
 depends = 'denops.vim'
 on_source = 'neoterm'
-
-# [[plugins]]
-# repo = 'gelguy/wilder.nvim'
-# depends = 'impatient.nvim'
-# on_event = 'CmdlineEnter'
-# hook_source = '''
-#   silent! call wilder#enable_cmdline_enter()
-#   set wildcharm=<Tab>
-# 
-#   cnoremap <expr> <Tab> wilder#in_context() ? wilder#next() : "\<Tab>"
-#   cnoremap <expr> <S-Tab> wilder#in_context() ? wilder#previous() : "\<S-Tab>"
-# 
-#   " only / and ? are enabled by default
-#   call wilder#set_option('modes', ['/', '?', ':'])
-# 
-#   " When the cmdline is empty, provide suggestions based on the cmdline history
-#   call wilder#set_option('pipeline', [
-#     \   wilder#branch(
-#     \     [
-#     \       wilder#check({_, x -> empty(x)}),
-#     \       wilder#history(),
-#     \     ],
-#     \     wilder#cmdline_pipeline(),
-#     \     wilder#search_pipeline(),
-#     \   ),
-#     \ ])
-# 
-#   " popupmenu completion
-#   call wilder#set_option('renderer', wilder#popupmenu_renderer({
-#     \ 'highlighter': wilder#basic_highlighter(),
-#     \ }))
-# '''
 
 [[plugins]]
 repo = 'kassio/neoterm'
@@ -164,8 +125,6 @@ hook_add = '''
   let g:oscyank_term = 'kitty'
   autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
 '''
-
-# git ==========================================================================
 
 [[plugins]]
 repo = 'cohama/agit.vim'
@@ -192,8 +151,6 @@ on_event = 'CmdLineEnter'
 hook_add = '''
   autocmd FileType fugitivestatus nmap <buffer> q gq
 '''
-
-# coding support ===============================================================
 
 [[plugins]]
 repo = 'editorconfig/editorconfig-vim'
