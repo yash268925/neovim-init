@@ -20,10 +20,11 @@ if dein#load_state($HOME . '/.config/nvim/dein')
 
   call dein#end()
 
-  lua require('impatient')
-
   call dein#save_state()
 endif
+
+lua require('impatient')
+lua require('init/lspconfig')
 
 filetype plugin indent on
 syntax enable

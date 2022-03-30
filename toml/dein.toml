@@ -38,9 +38,6 @@ hook_add = '''
 
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
-hook_add = '''
-  lua require('init/lspconfig')
-'''
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'

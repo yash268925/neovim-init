@@ -155,3 +155,4 @@ hook_add = '''
 [[plugins]]
 repo = 'editorconfig/editorconfig-vim'
 on_event = 'BufFilePre'
+
