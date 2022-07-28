@@ -10,8 +10,6 @@ set ignorecase
 set hlsearch
 set list
 set listchars=eol:$,tab:>-,space:.
-set wildignorecase
-set wildoptions+=pum
 set number relativenumber
 set noequalalways
 
@@ -53,14 +51,10 @@ nnoremap <C-n> gt
 nnoremap <C-p> gT
 nnoremap t; t
 nnoremap t <Nop>
-nnoremap to :<C-u>edit<Space>
-nnoremap tt :<C-u>tabnew<Space>
 nnoremap <expr> tO ':<C-u>edit ' . expand('%:h')
-nnoremap <expr> tT ':<C-u>tabnew ' . GetRelativePath()
+nnoremap tt :<C-u>tabnew<Space>
 nnoremap ts :<C-u>split<Space>
-nnoremap <expr> tS ':<C-u>split ' . GetRelativePath()
 nnoremap tv :<C-u>vsplit<Space>
-nnoremap <expr> tV ':<C-u>vsplit ' . GetRelativePath()
 nnoremap <silent> td :<C-u>tabclose<CR>
 
 " copy to system clipboard
@@ -84,3 +78,5 @@ let g:html_indent_script1="zero"
 
 " set gui environment
 set guifont=PlemolJP\ Console\ NF:h10
+
+set cmdheight=0

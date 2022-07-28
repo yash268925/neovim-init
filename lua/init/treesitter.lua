@@ -17,6 +17,7 @@ local ts_langs = {
   'vim',
   'toml',
   'vue',
+  'haskell',
 }
 
 require'nvim-treesitter.configs'.setup {

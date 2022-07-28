@@ -1,15 +1,13 @@
-inoremap <silent><expr> <TAB>
-    \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1)<CR>' :
-    \ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
-    \ '<TAB>' : ddc#manual_complete()
-
 call ddc#custom#patch_global('sources', ['skkeleton', 'nvim-lsp', 'around', 'file'])
+call ddc#custom#patch_global('cmdlineSources', ['cmdline', 'cmdline-history'])
 call ddc#custom#patch_global('sourceOptions', {
   \ '_': {
   \   'ignoreCase': v:true,
+  \   'maxItems': 20,
   \   'minAutoCompleteLength': 1,
-  \   'matchers': ['matcher_head'],
-  \   'sorters': ['sorter_rank'],
+  \   'matchers': ['matcher_fuzzy'],
+  \   'sorters': ['sorter_fuzzy'],
+  \   'converters': ['converter_fuzzy'],
   \ },
   \ 'skkeleton': {
   \   'mark': 'skkeleton',
@@ -27,7 +25,7 @@ call ddc#custom#patch_global('sourceOptions', {
   \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
   \ },
   \ 'cmdline': {
-  \   'mark': 'vim',
+  \   'mark': 'vimcmd',
   \ },
   \ 'cmdline-history': {
   \   'mark': 'history',

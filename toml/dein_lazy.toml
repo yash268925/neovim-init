@@ -110,23 +110,6 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'lambdalisue/guise.vim'
-depends = 'denops.vim'
-on_source = 'neoterm'
-
-[[plugins]]
-repo = 'kassio/neoterm'
-on_event = 'CmdlineEnter'
-
-[[plugins]]
-repo = 'ojroques/vim-oscyank'
-on_if = '$SSH_CONNECTION != ""'
-hook_add = '''
-  let g:oscyank_term = 'kitty'
-  autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
-'''
-
-[[plugins]]
 repo = 'cohama/agit.vim'
 on_cmd = ['Agit']
 hook_add = '''

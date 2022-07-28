@@ -11,7 +11,7 @@ local on_attach = function (client, bufnr)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', 'gx', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', 'gx', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', 'g[', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', 'g]', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 end
@@ -21,12 +21,10 @@ nvim_lsp.tsserver.setup({
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     end
-    client.resolved_capabilities.document_formatting = false
+    client.server_capabilities.document_formatting = false
     on_attach(client, bufnr)
   end,
-  root_dir = function(fname)
-    return nvim_lsp.util.find_node_modules_ancestor(fname) or vim.loop.os_homedir()
-  end,
+  root_dir = nvim_lsp.util.root_pattern('package.json'),
   filetypes = {
     "javascript",
     "javascriptreact",
@@ -42,7 +40,11 @@ nvim_lsp.tsserver.setup({
 
 nvim_lsp.denols.setup({
   on_attach = on_attach,
-  autostart = false
+  root_dir = nvim_lsp.util.root_pattern('deno.json'),
+  filetypes = {
+    "javascript",
+    "typescript"
+  },
 })
 
 local eslint = {
@@ -56,8 +58,8 @@ local eslint = {
 
 nvim_lsp.efm.setup({
   on_attach = function(client, bufnr)
-    client.resolved_capabilities.document_formatting = true
-    client.resolved_capabilities.goto_definition = false
+    client.server_capabilities.document_formatting = true
+    client.server_capabilities.goto_definition = false
     on_attach(client, bufnr)
   end,
   root_dir = function(fname)
@@ -120,6 +122,11 @@ nvim_lsp.intelephense.setup({
         maxSize = 3200000;
       },
       stubs = intelephense_stubs,
+      environment = {
+        includePaths = {
+          "/home/foxtail/repo/@abatanx/waggo8"
+        }
+      },
       diagnostics = {
         undefinedClassConstants = false,
         undefinedConstants = false,
@@ -131,4 +138,8 @@ nvim_lsp.intelephense.setup({
       }
     }
   }
+})
+
+nvim_lsp.hls.setup({
+  on_attach = on_attach
 })

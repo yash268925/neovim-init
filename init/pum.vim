@@ -1,11 +1,13 @@
-inoremap <Tab>      <Cmd>call pum#map#insert_relative(+1)<CR>
+inoremap <silent><expr> <TAB>
+    \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1)<CR>' :
+    \ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
+    \ '<TAB>' : ddc#manual_complete()
+
 inoremap <S-Tab>    <Cmd>call pum#map#insert_relative(-1)<CR>
 inoremap <C-n>      <Cmd>call pum#map#insert_relative(+1)<CR>
 inoremap <C-p>      <Cmd>call pum#map#insert_relative(-1)<CR>
 inoremap <C-y>      <Cmd>call pum#map#confirm()<CR>
 inoremap <C-e>      <Cmd>call pum#map#cancel()<CR>
-inoremap <PageDown> <Cmd>call pum#map#insert_relative_page(+1)<CR>
-inoremap <PageUp>   <Cmd>call pum#map#insert_relative_page(-1)<CR>
 
 call ddc#custom#patch_global('completionMenu', 'pum.vim')
 
@@ -14,7 +16,7 @@ call ddc#custom#patch_global('autoCompleteEvents', [
       \ 'CmdlineEnter', 'CmdlineChanged',
       \ ])
 
-nnoremap : <Cmd>call CommandlinePre()<CR>:
+noremap : <Cmd>call CommandlinePre()<CR>:
 
 function! CommandlinePre() abort
   " Note: It disables default command line completion!
@@ -28,19 +30,34 @@ function! CommandlinePre() abort
   cnoremap <C-e>   <Cmd>call pum#map#cancel()<CR>
 
   " Overwrite sources
-  let s:prev_buffer_config = ddc#custom#get_buffer()
+  if !exists('b:prev_buffer_config')
+    let b:prev_buffer_config = ddc#custom#get_buffer()
+  endif
+
   call ddc#custom#patch_buffer('sources',
         \ ['cmdline', 'cmdline-history', 'around'])
 
   autocmd User DDCCmdlineLeave ++once call CommandlinePost()
+  autocmd InsertEnter <buffer> ++once call CommandlinePost()
 
   " Enable command line completion
   call ddc#enable_cmdline_completion()
-  call ddc#enable()
 endfunction
 
 function! CommandlinePost() abort
+  if mapcheck('<Tab>', 'c')
+    cunmap <Tab>
+    cunmap <S-Tab>
+    cunmap <C-n>
+    cunmap <C-p>
+    cunmap <C-y>
+    cunmap <C-e>
+  endif
+
   " Restore sources
-  call ddc#custom#set_buffer(s:prev_buffer_config)
-  cunmap <Tab>
+  if exists('b:prev_buffer_config')
+    call ddc#custom#set_buffer(b:prev_buffer_config)
+  else
+    call ddc#custom#set_buffer({})
+  endif
 endfunction
