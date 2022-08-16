@@ -64,6 +64,10 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'lambdalisue/gin.vim'
+depends = 'denops.vim'
+
+[[plugins]]
 repo = 'Shougo/ddc.vim'
 depends = ['denops.vim']
 hook_add = '''

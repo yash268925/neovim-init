@@ -139,3 +139,7 @@ hook_add = '''
 repo = 'editorconfig/editorconfig-vim'
 on_event = 'BufFilePre'
 
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+on_cmd = ['QuickRun']
+
