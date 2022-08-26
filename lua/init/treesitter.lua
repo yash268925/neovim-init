@@ -1,5 +1,6 @@
 local ts_langs = {
   'javascript',
+  'jsdoc',
   'typescript',
   'tsx',
   'bash',
@@ -11,13 +12,17 @@ local ts_langs = {
   'html',
   'json',
   'php',
+  'phpdoc',
   'java',
   'make',
   'json5',
+  'jsonc',
   'vim',
   'toml',
   'vue',
   'haskell',
+  'glsl',
+  'sql'
 }
 
 require'nvim-treesitter.configs'.setup {
@@ -29,7 +34,7 @@ require'nvim-treesitter.configs'.setup {
   indent = {
     enable = true,
     disable = {
-      'vim',
+      'vim'
     }
   }
 }

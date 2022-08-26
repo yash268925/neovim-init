@@ -24,7 +24,9 @@ nvim_lsp.tsserver.setup({
     client.server_capabilities.document_formatting = false
     on_attach(client, bufnr)
   end,
-  root_dir = nvim_lsp.util.root_pattern('package.json'),
+  root_dir = function()
+    return vim.fs.dirname(vim.fs.find({'package.json', 'package.jsonc'}, { upward = true })[1])
+  end,
   filetypes = {
     "javascript",
     "javascriptreact",
@@ -40,11 +42,14 @@ nvim_lsp.tsserver.setup({
 
 nvim_lsp.denols.setup({
   on_attach = on_attach,
-  root_dir = nvim_lsp.util.root_pattern('deno.json'),
   filetypes = {
     "javascript",
     "typescript"
   },
+  root_dir = function()
+    return vim.fs.dirname(vim.fs.find({'deno.json', 'deno.jsonc'}, { upward = true })[1])
+  end,
+  single_file_support = false
 })
 
 local eslint = {

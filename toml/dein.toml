@@ -108,3 +108,6 @@ on_source = 'ddc.vim'
 [[plugins]]
 repo = 'tani/ddc-fuzzy'
 on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'vim-scripts/Decho'

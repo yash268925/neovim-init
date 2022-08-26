@@ -65,11 +65,17 @@ hook_add = '''
     \ },
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
-    \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+    \             [ 'readonly', 'filename', 'modified' ],
+    \             [ 'gitbranch', 'gittraffic' ] ]
+    \ },
+    \ 'inactive': {
+    \   'left': [ [ 'filename', 'modified' ] ],
+    \   'right': []
     \ },
     \ 'component_function': {
-    \   'gitbranch': 'FugitiveHead',
-    \   'bufferinfo': 'lightline#buffer#bufferinfo',
+    \   'gitbranch': 'gin#component#branch#unicode',
+    \   'gittraffic': 'gin#component#traffic#unicode',
+    \   'gitfilename': 'gin#component#worktree#full',
     \ },
     \ 'component_expand': {
     \    'buffers': 'lightline#bufferline#buffers'
