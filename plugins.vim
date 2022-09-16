@@ -24,6 +24,5 @@ endif
 
 lua require('impatient')
 lua require('init/lspconfig')
-
-filetype plugin indent on
-syntax enable
+lua require('init/treesitter')
+set foldexpr=nvim_treesitter#foldexpr()

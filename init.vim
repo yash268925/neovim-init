@@ -5,6 +5,8 @@ function! LoadSubscript(name)
   endif
 endfunction
 
-call LoadSubscript('plugins.vim')
 call LoadSubscript('defaults.vim')
 call LoadSubscript('functions.vim')
+call LoadSubscript('plugins.vim')
+
+colorscheme iceberg-yash

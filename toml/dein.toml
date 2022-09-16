@@ -7,6 +7,9 @@ if = 'has("nvim")'
 
 [[plugins]]
 repo = 'vim-denops/denops.vim'
+hook_add = '''
+  let g:denops_server_addr = '127.0.0.1:32123'
+'''
 
 [[plugins]]
 repo = 'ryanoasis/vim-devicons'
@@ -27,10 +30,10 @@ hook_add = '''
 
 [[plugins]]
 repo = 'nvim-treesitter/nvim-treesitter'
-hook_add = '''
-  lua require('init/treesitter')
-  set foldexpr=nvim_treesitter#foldexpr()
-'''
+hook_post_update = 'TSUpdate'
+
+[[plugins]]
+repo = 'nvim-treesitter/playground'
 
 [[plugins]]
 repo = 'Shougo/pum.vim'
@@ -66,6 +69,15 @@ hook_add = '''
 [[plugins]]
 repo = 'lambdalisue/gin.vim'
 depends = 'denops.vim'
+
+[[plugins]]
+repo = 'junegunn/gv.vim'
+
+# [[plugins]]
+# repo = 'cocopon/pgmnt.vim'
+
+# [[plugins]]
+# repo = 'yash268925/iceberg.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'
@@ -111,3 +123,9 @@ on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'vim-scripts/Decho'
+
+[[plugins]]
+repo = 'lambdalisue/suda.vim'
+hook_add = '''
+  let g:suda_smart_edit = 1
+'''

@@ -25,8 +25,6 @@ augroup filetypeIndent
   autocmd BufNewFile,BufRead Makefile setlocal noexpandtab shiftwidth=4 softtabstop=4
 augroup end
 
-syntax on
-
 nnoremap s <Nop>
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
@@ -78,5 +76,8 @@ let g:html_indent_script1="zero"
 
 " set gui environment
 set guifont=PlemolJP\ Console\ NF:h10
+
+set termguicolors
+set cursorline
 
 set cmdheight=0
