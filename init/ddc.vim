@@ -10,9 +10,11 @@ call ddc#custom#patch_global('sourceOptions', {
   \   'converters': ['converter_fuzzy'],
   \ },
   \ 'skkeleton': {
-  \   'mark': 'skkeleton',
-  \   'matchers': ['skkeleton'],
-  \   'sorters': []
+  \     'mark': 'skkeleton',
+  \     'matchers': ['skkeleton'],
+  \     'sorters': [],
+  \     'minAutoCompleteLength': 2,
+  \     'isVolatile': v:true,
   \ },
   \ 'around': { 'mark': 'A' },
   \ 'file': {

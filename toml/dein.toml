@@ -7,9 +7,6 @@ if = 'has("nvim")'
 
 [[plugins]]
 repo = 'vim-denops/denops.vim'
-hook_add = '''
-  let g:denops_server_addr = '127.0.0.1:32123'
-'''
 
 [[plugins]]
 repo = 'ryanoasis/vim-devicons'
@@ -73,11 +70,18 @@ depends = 'denops.vim'
 [[plugins]]
 repo = 'junegunn/gv.vim'
 
-# [[plugins]]
-# repo = 'cocopon/pgmnt.vim'
+[[plugins]]
+repo = 'cocopon/pgmnt.vim'
 
-# [[plugins]]
-# repo = 'yash268925/iceberg.vim'
+[[plugins]]
+repo = 'yash268925/iceberg.vim'
+rev = 'feat/treesitter-rules'
+
+[[plugins]]
+repo = 'drmingdrmer/vim-toggle-quickfix'
+hook_add = '''
+  nmap <C-q><C-l> <Plug>window:quickfix:loop
+'''
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'

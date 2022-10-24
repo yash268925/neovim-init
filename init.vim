@@ -9,4 +9,4 @@ call LoadSubscript('defaults.vim')
 call LoadSubscript('functions.vim')
 call LoadSubscript('plugins.vim')
 
-colorscheme iceberg-yash
+colorscheme iceberg

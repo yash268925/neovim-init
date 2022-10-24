@@ -1,37 +1,9 @@
 [[plugins]]
-repo = 'yash268925/iceberg.vim'
-on_event = 'VimEnter'
-
-[[plugins]]
 repo = 'vim-skk/skkeleton'
 on_event = 'InsertEnter'
 hook_add = '''
   imap <C-j> <Plug>(skkeleton-toggle)
   cmap <C-j> <Plug>(skkeleton-toggle)
-
-  lua << EOF
-  local prev_buffer_config
-
-  function _G.skkeleton_enable_pre()
-    prev_buffer_config = vim.fn['ddc#custom#get_buffer']()
-    vim.fn['ddc#custom#patch_buffer']{
-      completionMenu = 'native',
-      sources = {'skkeleton'},
-    }
-  end
-
-  function _G.skkeleton_disable_pre()
-    vim.fn['ddc#custom#set_buffer'](prev_buffer_config)
-  end
-
-  vim.cmd[[
-    augroup skkeleton_callbacks
-      autocmd!
-      autocmd User skkeleton-enable-pre call v:lua.skkeleton_enable_pre()
-      autocmd User skkeleton-disable-pre call v:lua.skkeleton_disable_pre()
-    augroup END
-  ]]
-EOF
 '''
 hook_post_source = '''
   call skkeleton#config({
@@ -41,7 +13,6 @@ hook_post_source = '''
     \ 'registerConvertResult': v:true,
     \ 'userJisyo': $HOME . '/.skk/userJisyo',
     \ })
-
 '''
 
 [[plugins]]
@@ -52,7 +23,7 @@ hook_add = '''
   let g:lightline = {
     \ 'colorscheme': 'iceberg',
     \ 'tabline': {
-    \   'left': [[ 'buffers' ]],
+    \   'left': [ [ 'tabs', 'buffers' ] ],
     \   'right': [],
     \ },
     \ 'active': {
@@ -74,8 +45,14 @@ hook_add = '''
     \ },
     \ 'component_type': {
     \    'buffers': 'tabsel'
+    \ },
+    \ 'component': {
+    \    'filename': '%n: %t'
     \ }
     \ }
+  let g:lightline.tab = {
+    \ 'active': [ 'tabnum' ],
+    \ 'inactive': [ 'tabnum', 'filename' ] }
   set hidden
   set showtabline=2
 
@@ -89,7 +66,7 @@ hook_add = '''
   let g:lightline#bufferline#show_number=1
   let g:lightline#bufferline#enable_devicons=1
   let g:lightline#bufferline#unicode_symbols=1
-  let g:lightline#bufferline#filter_by_tabpage=0
+  let g:lightline#bufferline#filter_by_tabpage=1
   let g:lightline#bufferline#unnamed='[No Name]'
 '''
 
@@ -141,3 +118,9 @@ on_event = 'BufFilePre'
 repo = 'thinca/vim-quickrun'
 on_cmd = ['QuickRun']
 
+[[plugins]]
+repo = 'previm/previm'
+on_cmd = ['PrevimOpen']
+hook_add = '''
+  let g:previm_open_cmd = 'mdpreview'
+'''
