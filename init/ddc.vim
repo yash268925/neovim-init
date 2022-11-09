@@ -1,5 +1,11 @@
 call ddc#custom#patch_global('ui', 'pum')
-call ddc#custom#patch_global('sources', ['skkeleton', 'nvim-lsp', 'around', 'file', 'rg'])
+call ddc#custom#patch_global('sources', [
+  \ 'skkeleton',
+  \ 'nvim-lsp',
+  \ 'around',
+  \ 'file',
+  \ 'rg',
+  \ ])
 call ddc#custom#patch_global('cmdlineSources', ['cmdline', 'cmdline-history'])
 call ddc#custom#patch_global('sourceOptions', {
   \ '_': {
@@ -11,13 +17,15 @@ call ddc#custom#patch_global('sourceOptions', {
   \   'converters': ['converter_fuzzy'],
   \ },
   \ 'skkeleton': {
-  \     'mark': 'skkeleton',
-  \     'matchers': ['skkeleton'],
-  \     'sorters': [],
-  \     'minAutoCompleteLength': 2,
-  \     'isVolatile': v:true,
+  \   'mark': 'skkeleton',
+  \   'matchers': ['skkeleton'],
+  \   'sorters': [],
+  \   'minAutoCompleteLength': 2,
+  \   'isVolatile': v:true,
   \ },
-  \ 'around': { 'mark': 'A' },
+  \ 'around': {
+  \   'mark': 'A',
+  \ },
   \ 'file': {
   \   'mark': 'F',
   \   'isVolatile': v:true,
