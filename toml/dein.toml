@@ -84,11 +84,23 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'matsui54/denops-popup-preview.vim'
+depends = ['denops.vim']
+on_source = 'ddc.vim'
+hook_add = '''
+  call popup_preview#enable()
+'''
+
+[[plugins]]
 repo = 'Shougo/ddc.vim'
 depends = ['denops.vim']
 hook_add = '''
   call LoadSubscript('init/ddc.vim')
 '''
+
+[[plugins]]
+repo = 'Shougo/ddc-ui-pum'
+depends = ['pum.vim']
 
 [[plugins]]
 repo = 'Shougo/ddc-matcher_head'
@@ -113,12 +125,14 @@ on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-cmdline'
-depends = ['denops.vim']
 on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-cmdline-history'
-depends = ['denops.vim']
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-rg'
 on_source = 'ddc.vim'
 
 [[plugins]]

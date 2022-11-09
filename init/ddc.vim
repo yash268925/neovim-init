@@ -1,4 +1,5 @@
-call ddc#custom#patch_global('sources', ['skkeleton', 'nvim-lsp', 'around', 'file'])
+call ddc#custom#patch_global('ui', 'pum')
+call ddc#custom#patch_global('sources', ['skkeleton', 'nvim-lsp', 'around', 'file', 'rg'])
 call ddc#custom#patch_global('cmdlineSources', ['cmdline', 'cmdline-history'])
 call ddc#custom#patch_global('sourceOptions', {
   \ '_': {
@@ -31,6 +32,10 @@ call ddc#custom#patch_global('sourceOptions', {
   \ },
   \ 'cmdline-history': {
   \   'mark': 'history',
+  \ },
+  \ 'rg': {
+  \   'mark': 'rg',
+  \   'minAutoCompleteLength': 4,
   \ },
   \ })
 
