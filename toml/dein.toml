@@ -34,7 +34,6 @@ repo = 'nvim-treesitter/playground'
 
 [[plugins]]
 repo = 'Shougo/pum.vim'
-depends = ['ddc.vim']
 hook_add = '''
   call LoadSubscript('init/pum.vim')
 '''
@@ -92,35 +91,49 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'vim-scripts/Decho'
+
+[[plugins]]
+repo = 'lambdalisue/suda.vim'
+hook_add = '''
+  let g:suda_smart_edit = 1
+'''
+
+
+[[plugins]]
 repo = 'Shougo/ddc.vim'
-depends = ['denops.vim']
+depends = ['denops.vim', 'pum.vim']
 hook_add = '''
   call LoadSubscript('init/ddc.vim')
 '''
 
+# ddc-ui
 [[plugins]]
 repo = 'Shougo/ddc-ui-pum'
 depends = ['pum.vim']
 
+# ddc-matcher
 [[plugins]]
-repo = 'Shougo/ddc-matcher_head'
+repo = 'tani/ddc-fuzzy'
 on_source = 'ddc.vim'
 
+# ddc-sorter
 [[plugins]]
 repo = 'Shougo/ddc-sorter_rank'
 on_source = 'ddc.vim'
 
+# ddc-source
 [[plugins]]
 repo = 'LumaKernel/ddc-source-file'
 on_source = 'ddc.vim'
 
 [[plugins]]
-repo = 'Shougo/ddc-source-nvim-lsp'
-depends = ['nvim-lspconfig']
+repo = 'tani/ddc-path'
 on_source = 'ddc.vim'
 
 [[plugins]]
-repo = 'Shougo/ddc-source-around'
+repo = 'Shougo/ddc-source-nvim-lsp'
+depends = ['nvim-lspconfig']
 on_source = 'ddc.vim'
 
 [[plugins]]
@@ -136,14 +149,5 @@ repo = 'Shougo/ddc-source-rg'
 on_source = 'ddc.vim'
 
 [[plugins]]
-repo = 'tani/ddc-fuzzy'
+repo = 'kuuote/ddc-source-suconv'
 on_source = 'ddc.vim'
-
-[[plugins]]
-repo = 'vim-scripts/Decho'
-
-[[plugins]]
-repo = 'lambdalisue/suda.vim'
-hook_add = '''
-  let g:suda_smart_edit = 1
-'''

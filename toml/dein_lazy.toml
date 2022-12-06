@@ -16,6 +16,14 @@ hook_post_source = '''
 '''
 
 [[plugins]]
+repo = 'delphinus/skkeleton_indicator.nvim'
+depends = ['skkeleton']
+on_event = 'InsertEnter'
+hook_post_source = '''
+lua require('init/skkeleton_indicator');
+'''
+
+[[plugins]]
 repo = 'itchyny/lightline.vim'
 on_event = 'UIEnter'
 depends = ['iceberg.vim', 'vim-devicons', 'lightline-bufferline']

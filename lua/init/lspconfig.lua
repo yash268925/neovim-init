@@ -61,6 +61,14 @@ local eslint = {
   formatStdin = true
 }
 
+local prettier = {
+  formatCommand = 'prettierd "${INPUT}"',
+  formatStdin = true,
+  env = {
+    string.format('PRETTIERD_DEFAULT_CONFIG=%s', vim.fn.expand('~/.config/nvim/utils/linter-config/prettierrc.json')),
+  },
+}
+
 nvim_lsp.efm.setup({
   on_attach = function(client, bufnr)
     client.server_capabilities.document_formatting = true
@@ -72,13 +80,12 @@ nvim_lsp.efm.setup({
   end,
   settings = {
     languages = {
-      javascript = {eslint},
-      javascriptreact = {eslint},
-      ["javascript.jsx"] = {eslint},
-      typescript = {eslint},
-      ["typescript.tsx"] = {eslint},
-      typescriptreact = {eslint},
-      vue = {eslint}
+      javascript = {eslint, prettier},
+      javascriptreact = {eslint, prettier},
+      ["javascript.jsx"] = {eslint, prettier},
+      typescript = {eslint, prettier},
+      ["typescript.tsx"] = {eslint, prettier},
+      typescriptreact = {prettier},
     }
   },
   filetypes = {
@@ -88,16 +95,6 @@ nvim_lsp.efm.setup({
     "typescript",
     "typescript.tsx",
     "typescriptreact",
-    "vue"
-  }
-})
-
-nvim_lsp.volar.setup({
-  on_attach = on_attach,
-  settings = {
-    volar = {
-      lowPowerMode = false
-    }
   }
 })
 
