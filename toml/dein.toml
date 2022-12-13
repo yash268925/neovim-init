@@ -12,6 +12,9 @@ repo = 'vim-denops/denops.vim'
 repo = 'ryanoasis/vim-devicons'
 
 [[plugins]]
+repo = 'rbtnn/vim-ambiwidth'
+
+[[plugins]]
 repo = 'cocopon/vaffle.vim'
 depends = ['vim-devicons']
 hook_add = '''
