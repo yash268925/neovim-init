@@ -68,6 +68,9 @@ hook_add = '''
 [[plugins]]
 repo = 'lambdalisue/gin.vim'
 depends = 'denops.vim'
+hook_add = '''
+  call LoadSubscript('init/gin.vim')
+'''
 
 [[plugins]]
 repo = 'junegunn/gv.vim'
