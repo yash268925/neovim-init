@@ -17,19 +17,11 @@ repo = 'rbtnn/vim-ambiwidth'
 [[plugins]]
 repo = 'cocopon/vaffle.vim'
 depends = ['vim-devicons']
-hook_add = '''
-  let g:vaffle_render_custom_icon = 'VaffleRenderCustomIcon'
-  let NERDTreeHijackNetrw = 0
-
-  function! VaffleRenderCustomIcon(item)
-    return WebDevIconsGetFileTypeSymbol(a:item.basename, a:item.is_dir)
-  endfunction
-
-  call LoadSubscript('init/vaffle.vim')
-'''
 
 [[plugins]]
-repo = 'nvim-treesitter/nvim-treesitter'
+repo = 'yash268925/nvim-treesitter'
+rev = 'html-add-missing-script-type'
+#repo = 'nvim-treesitter/nvim-treesitter'
 hook_post_update = 'TSUpdate'
 
 [[plugins]]
@@ -37,9 +29,6 @@ repo = 'nvim-treesitter/playground'
 
 [[plugins]]
 repo = 'Shougo/pum.vim'
-hook_add = '''
-  call LoadSubscript('init/pum.vim')
-'''
 
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
@@ -50,27 +39,10 @@ depends = 'denops.vim'
 
 [[plugins]]
 repo = 'ojroques/vim-oscyank'
-hook_add = '''
-  let g:oscyank_term = 'kitty'
-  let g:clipboard = {
-    \ 'name': 'osc52',
-    \ 'copy': {
-    \   '+': {lines, regtype -> OSCYankString(join(lines, "\n"))},
-    \   '*': {lines, regtype -> OSCYankString(join(lines, "\n"))},
-    \ },
-    \ 'paste': {
-    \   '+': {-> [split(getreg(''), '\n'), getregtype('')]},
-    \   '*': {-> [split(getreg(''), '\n'), getregtype('')]},
-    \ },
-    \ }
-'''
 
 [[plugins]]
 repo = 'lambdalisue/gin.vim'
 depends = 'denops.vim'
-hook_add = '''
-  call LoadSubscript('init/gin.vim')
-'''
 
 [[plugins]]
 repo = 'junegunn/gv.vim'
@@ -84,76 +56,51 @@ rev = 'feat/treesitter-rules'
 
 [[plugins]]
 repo = 'drmingdrmer/vim-toggle-quickfix'
-hook_add = '''
-  nmap <C-q><C-l> <Plug>window:quickfix:loop
-'''
 
 [[plugins]]
 repo = 'matsui54/denops-popup-preview.vim'
 depends = ['denops.vim']
 on_source = 'ddc.vim'
-hook_add = '''
-  call popup_preview#enable()
-'''
 
 [[plugins]]
 repo = 'vim-scripts/Decho'
 
 [[plugins]]
 repo = 'lambdalisue/suda.vim'
-hook_add = '''
-  let g:suda_smart_edit = 1
-'''
-
 
 [[plugins]]
 repo = 'Shougo/ddc.vim'
-depends = ['denops.vim', 'pum.vim']
-hook_add = '''
-  call LoadSubscript('init/ddc.vim')
-'''
+depends = 'denops.vim'
 
 # ddc-ui
 [[plugins]]
 repo = 'Shougo/ddc-ui-pum'
-depends = ['pum.vim']
+depends = ['denops.vim', 'ddc.vim', 'pum.vim']
 
 # ddc-matcher
 [[plugins]]
 repo = 'tani/ddc-fuzzy'
-on_source = 'ddc.vim'
 
 # ddc-sorter
 [[plugins]]
 repo = 'Shougo/ddc-sorter_rank'
-on_source = 'ddc.vim'
 
 # ddc-source
 [[plugins]]
 repo = 'LumaKernel/ddc-source-file'
-on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'tani/ddc-path'
-on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-source-nvim-lsp'
 depends = ['nvim-lspconfig']
-on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-source-cmdline'
-on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-source-cmdline-history'
-on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-source-rg'
-on_source = 'ddc.vim'
-
-[[plugins]]
-repo = 'kuuote/ddc-source-suconv'
-on_source = 'ddc.vim'
