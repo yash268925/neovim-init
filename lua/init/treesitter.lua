@@ -25,7 +25,7 @@ local langs = {
 }
 
 local function ts_disable(bufnr)
-  return vim.api.nvim_buf_line_count(bufnr) > 2000
+  return vim.api.nvim_buf_line_count(bufnr) > 20000
 end
 
 require'nvim-treesitter.configs'.setup {

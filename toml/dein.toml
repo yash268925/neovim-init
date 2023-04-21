@@ -19,9 +19,7 @@ repo = 'cocopon/vaffle.vim'
 depends = ['vim-devicons']
 
 [[plugins]]
-repo = 'yash268925/nvim-treesitter'
-rev = 'html-add-missing-script-type'
-#repo = 'nvim-treesitter/nvim-treesitter'
+repo = 'nvim-treesitter/nvim-treesitter'
 hook_post_update = 'TSUpdate'
 
 [[plugins]]

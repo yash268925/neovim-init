@@ -25,8 +25,8 @@ let g:oscyank_term = 'kitty'
 let g:clipboard = {
   \ 'name': 'osc52',
   \ 'copy': {
-  \   '+': {lines, regtype -> OSCYankString(join(lines, "\n"))},
-  \   '*': {lines, regtype -> OSCYankString(join(lines, "\n"))},
+  \   '+': {lines, regtype -> OSCYank(join(lines, "\n"))},
+  \   '*': {lines, regtype -> OSCYank(join(lines, "\n"))},
   \ },
   \ 'paste': {
   \   '+': {-> [split(getreg(''), '\n'), getregtype('')]},
@@ -40,8 +40,7 @@ nmap <C-q><C-l> <Plug>window:quickfix:loop
 
 
 " gin.vim
-command GinLogg :GinLog --graph --oneline --decorate=full
-command GinLoggAll :GinLog --graph --oneline --decorate=full --all
+let g:gin_log_default_args = ['--graph', '--oneline', '--decorate=full', '--date-order', '--all']
 
 
 " suda.vim

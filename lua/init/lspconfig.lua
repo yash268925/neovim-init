@@ -126,7 +126,7 @@ nvim_lsp.intelephense.setup({
       stubs = intelephense_stubs,
       environment = {
         includePaths = {
-          "/home/foxtail/repo/@abatanx/waggo8"
+          "/home/foxtail/repo/@abatanx/waggo8.1"
         }
       },
       diagnostics = {
