@@ -50,7 +50,7 @@ repo = 'cocopon/pgmnt.vim'
 
 [[plugins]]
 repo = 'yash268925/iceberg.vim'
-rev = 'feat/treesitter-rules'
+rev = 'feat/floating-window-border'
 
 [[plugins]]
 repo = 'drmingdrmer/vim-toggle-quickfix'
@@ -66,6 +66,7 @@ repo = 'vim-scripts/Decho'
 [[plugins]]
 repo = 'lambdalisue/suda.vim'
 
+# ddc
 [[plugins]]
 repo = 'Shougo/ddc.vim'
 depends = 'denops.vim'
@@ -102,3 +103,29 @@ repo = 'Shougo/ddc-source-cmdline-history'
 
 [[plugins]]
 repo = 'Shougo/ddc-source-rg'
+
+# ddu
+[[plugins]]
+repo = 'Shougo/ddu.vim'
+depends = 'denops.vim'
+
+[[plugins]]
+repo = 'Shougo/ddu-ui-ff'
+
+[[plugins]]
+repo = 'Shougo/ddu-source-file_rec'
+
+[[plugins]]
+repo = 'shun/ddu-source-rg'
+
+[[plugins]]
+repo = 'Shougo/ddu-kind-file'
+
+[[plugins]]
+repo = 'ryota2357/ddu-column-icon_filename'
+
+[[plugins]]
+repo = 'Shougo/ddu-filter-matcher_hidden'
+
+[[plugins]]
+repo = 'yuki-yano/ddu-filter-fzf'
