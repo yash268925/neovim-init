@@ -64,9 +64,11 @@ inoremap <C-e>      <Cmd>call pum#map#cancel()<CR>
 call ddc#custom#patch_global('ui', 'pum')
 
 call ddc#custom#patch_global('autoCompleteEvents', [
-      \ 'InsertEnter', 'TextChangedI', 'TextChangedP',
-      \ 'CmdlineChanged',
+      \ 'InsertEnter', 'TextChangedI', 'TextChangedP', 'TextChangedT',
+      \ 'CmdlineEnter', 'CmdlineChanged',
       \ ])
+
+call ddc#enable_terminal_completion()
 
 nnoremap :       <Cmd>call CommandlinePre()<CR>:
 
@@ -159,6 +161,7 @@ call ddc#custom#patch_global('sourceOptions', {
   \ },
   \ 'cmdline': {
   \   'mark': 'vimcmd',
+  \   'isVolatile': v:true,
   \ },
   \ 'cmdline-history': {
   \   'mark': 'history',
@@ -313,13 +316,13 @@ function! s:ddu_ff_filter_my_settings() abort
     \ <Cmd>call ddu#ui#do_action('itemAction', {'name': 'open'})<CR>
 
   inoremap <buffer><silent> <Esc>
-    \ <Esc><Cmd>close<CR>
+    \ <Cmd>call ddu#ui#do_action('quit')<CR>
 
-  nnoremap <buffer><silent> <Enter>
-    \ <Cmd>close<CR>
+  inoremap <buffer><silent> <C-n>
+    \ <Cmd>call ddu#ui#do_action('cursorNext')<CR>
 
-  nnoremap <buffer><silent> <Esc>
-    \ <Cmd>close<CR>
+  inoremap <buffer><silent> <C-p>
+    \ <Cmd>call ddu#ui#do_action('cursorPrevious')<CR>
 endfunction
 
 nmap <silent> ;f <Cmd>call ddu#start({})<CR>
