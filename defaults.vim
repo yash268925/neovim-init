@@ -68,8 +68,8 @@ tnoremap <C-w>n <C-\><C-n>
 nnoremap <C-s> <Esc>:syntax sync fromstart<CR>
 
 " make popup to transparent
-set pumblend=20
-set winblend=20
+set pumblend=5
+set winblend=5
 
 " set html_indent_script1 to 0
 let g:html_indent_script1="zero"

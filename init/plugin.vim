@@ -233,10 +233,20 @@ call ddu#custom#patch_global({
   \     'ff': {
   \       'split': 'floating',
   \       'floatingBorder': 'rounded',
+  \       'filterFloatingPosition': 'top',
+  \       'autoAction': {
+  \         'name': 'preview',
+  \       },
   \       'previewFloating': v:true,
-  \       'previewFloatingBorder': 'rounded',
+  \       'previewFloatingBorder': 'single',
+  \       'previewSplit': 'vertical',
   \       'startFilter': v:true,
   \       'prompt': '> ',
+  \       'winHeight': floor(&lines * 0.8),
+  \       'winRow': floor(&lines * 0.1),
+  \       'winWidth': floor(&columns * 0.8),
+  \       'winCol': floor(&columns * 0.1),
+  \       'previewWidth': floor(&columns * 0.8 / 2),
   \     },
   \   },
   \   'filterParams': {
@@ -319,10 +329,10 @@ function! s:ddu_ff_filter_my_settings() abort
     \ <Cmd>call ddu#ui#do_action('quit')<CR>
 
   inoremap <buffer><silent> <C-n>
-    \ <Cmd>call ddu#ui#do_action('cursorNext')<CR>
+    \ <Cmd>call ddu#ui#multi_actions([['cursorNext'], ['preview']])<CR>
 
   inoremap <buffer><silent> <C-p>
-    \ <Cmd>call ddu#ui#do_action('cursorPrevious')<CR>
+    \ <Cmd>call ddu#ui#multi_actions([['cursorPrevious'], ['preview']])<CR>
 endfunction
 
 nmap <silent> ;f <Cmd>call ddu#start({})<CR>

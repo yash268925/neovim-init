@@ -86,10 +86,10 @@ on_cmd = ['BufExplorer']
 repo = 'mhinz/vim-sayonara'
 on_cmd = ['Sayonara']
 hook_add = '''
-  nnoremap sa :<C-u>Sayonara<CR>
-  nnoremap sq :<C-u>Sayonara!<CR>
+  nnoremap sq :<C-u>Sayonara<CR>
+  nnoremap sa :<C-u>Sayonara!<CR>
 
-  let g:sayonara_confirm_quit=1
+  let g:sayonara_confirm_quit=0
 '''
 
 [[plugins]]
