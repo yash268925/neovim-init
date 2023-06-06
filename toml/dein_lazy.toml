@@ -30,10 +30,6 @@ depends = ['iceberg.vim', 'vim-devicons', 'lightline-bufferline']
 hook_add = '''
   let g:lightline = {
     \ 'colorscheme': 'iceberg',
-    \ 'tabline': {
-    \   'left': [ [ 'tabs', 'buffers' ] ],
-    \   'right': [],
-    \ },
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
     \             [ 'readonly', 'filename', 'modified' ],
@@ -63,9 +59,6 @@ hook_add = '''
     \ 'inactive': [ 'tabnum', 'filename' ] }
   set hidden
   set showtabline=2
-
-  nnoremap <Left> :bprev<CR>
-  nnoremap <Right> :bnext<CR>
 '''
 
 [[plugins]]
