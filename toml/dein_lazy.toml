@@ -26,17 +26,19 @@ lua require('init/skkeleton_indicator');
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 on_event = 'UIEnter'
-depends = ['iceberg.vim', 'vim-devicons', 'lightline-bufferline']
+depends = ['iceberg.vim', 'vim-devicons']
 hook_add = '''
   let g:lightline = {
     \ 'colorscheme': 'iceberg',
     \ 'active': {
-    \   'left': [ [ 'mode', 'paste' ],
-    \             [ 'readonly', 'filename', 'modified' ],
-    \             [ 'gitbranch', 'gittraffic' ] ]
+    \   'left': [
+    \     ['mode', 'paste'],
+    \     ['readonly', 'filename', 'modified'],
+    \     ['gitbranch', 'gittraffic']
+    \   ],
     \ },
     \ 'inactive': {
-    \   'left': [ [ 'filename', 'modified' ] ],
+    \   'left': [['filename', 'modified']],
     \   'right': []
     \ },
     \ 'component_function': {
@@ -44,32 +46,34 @@ hook_add = '''
     \   'gittraffic': 'gin#component#traffic#unicode',
     \   'gitfilename': 'gin#component#worktree#full',
     \ },
-    \ 'component_expand': {
-    \    'buffers': 'lightline#bufferline#buffers'
-    \ },
     \ 'component_type': {
     \    'buffers': 'tabsel'
     \ },
     \ 'component': {
-    \    'filename': '%n: %t'
+    \    'filename': '%n: %f'
     \ }
+    \ }
+  let g:lightline.tabline = {
+    \   'left': [['tabs']],
+    \   'right': [],
     \ }
   let g:lightline.tab = {
-    \ 'active': [ 'tabnum' ],
-    \ 'inactive': [ 'tabnum', 'filename' ] }
+    \   'active': ['tabnum', 'filename'],
+    \   'inactive': ['tabnum', 'filename']
+    \ }
   set hidden
   set showtabline=2
 '''
 
-[[plugins]]
-repo = 'mengelbrecht/lightline-bufferline'
-hook_add = '''
-  let g:lightline#bufferline#show_number=1
-  let g:lightline#bufferline#enable_devicons=1
-  let g:lightline#bufferline#unicode_symbols=1
-  let g:lightline#bufferline#filter_by_tabpage=1
-  let g:lightline#bufferline#unnamed='[No Name]'
-'''
+# [[plugins]]
+# repo = 'mengelbrecht/lightline-bufferline'
+# hook_add = '''
+#   let g:lightline#bufferline#show_number=1
+#   let g:lightline#bufferline#enable_devicons=1
+#   let g:lightline#bufferline#unicode_symbols=1
+#   let g:lightline#bufferline#filter_by_tabpage=1
+#   let g:lightline#bufferline#unnamed='[No Name]'
+# '''
 
 [[plugins]]
 repo = 'jlanzarotta/bufexplorer'
