@@ -61,3 +61,5 @@ inoremap <C-e>      <Cmd>call pum#map#cancel()<CR>
 
 " denops-popup-preview.vim
 call popup_preview#enable()
+
+set foldexpr=nvim_treesitter#foldexpr()

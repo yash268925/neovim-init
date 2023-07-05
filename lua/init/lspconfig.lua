@@ -16,6 +16,8 @@ local on_attach = function (client, bufnr)
   buf_set_keymap('n', 'g]', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 end
 
+local is_node_repo = vim.fs.dirname(vim.fs.find({'package.json', 'package.jsonc'}, { upward = true })[1]) ~= nil
+
 nvim_lsp.tsserver.setup({
   on_attach = function(client, bufnr)
     if client.config.flags then
@@ -37,7 +39,8 @@ nvim_lsp.tsserver.setup({
   },
   flags = {
     debounce_text_changes = 150,
-  }
+  },
+  autostart = is_node_repo
 })
 
 nvim_lsp.denols.setup({
@@ -49,7 +52,9 @@ nvim_lsp.denols.setup({
   root_dir = function()
     return vim.fs.dirname(vim.fs.find({'deno.json', 'deno.jsonc'}, { upward = true })[1])
   end,
-  single_file_support = false
+  single_file_support = false,
+  autostart = not(is_node_repo),
+  init_options = { lint = true, unstable = true }
 })
 
 local eslint = {

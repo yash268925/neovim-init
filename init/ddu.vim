@@ -1,4 +1,3 @@
-call ddu#custom#alias('column', 'icon_filename_for_ff', 'icon_filename')
 call ddu#custom#patch_global({
   \   'ui': 'ff',
   \   'sources': [
@@ -9,13 +8,12 @@ call ddu#custom#patch_global({
   \       },
   \     },
   \   ],
-  \   'columns': ['icon_filename'],
   \   'sourceOptions': {
   \     '_': {
   \       'matchers': ['matcher_hidden', 'matcher_fzf'],
   \     },
   \     'file_rec': {
-  \       'columns': ['icon_filename_for_ff'],
+  \       'columns': ['icon_filename'],
   \     },
   \   },
   \   'kindOptions': {
@@ -49,7 +47,7 @@ call ddu#custom#patch_global({
   \     },
   \   },
   \   'columnParams': {
-  \     'icon_filename_for_ff': {
+  \     'icon_filename': {
   \       'defaultIcon': {
   \         'icon': '',
   \       },

@@ -102,6 +102,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
+rev = 'main'
 on_event = 'BufFilePre'
 
 [[plugins]]

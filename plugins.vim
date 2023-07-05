@@ -27,5 +27,3 @@ lua require('init/treesitter')
 call LoadSubscript('init/plugin.vim')
 call LoadSubscript('init/ddc.vim')
 call LoadSubscript('init/ddu.vim')
-
-set foldexpr=nvim_treesitter#foldexpr()
