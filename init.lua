@@ -1,0 +1,15 @@
+vim.loader.enable()
+
+require 'startup.base'
+require 'startup.minpac'
+require 'startup.lightline'
+require 'startup.oscyank'
+require 'startup.toggle_quickfix'
+require 'startup.treesitter'
+require 'startup.lspconfig'
+require 'startup.sayonara'
+require 'startup.gin'
+require 'startup.suda'
+require 'startup.skkeleton'
+require 'startup.ddc'
+require 'startup.ddu'
