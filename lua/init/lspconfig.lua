@@ -16,7 +16,7 @@ local on_attach = function (client, bufnr)
   buf_set_keymap('n', 'g]', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 end
 
-local is_node_repo = vim.fs.dirname(vim.fs.find({'package.json', 'package.jsonc'}, { upward = true })[1]) ~= nil
+local is_deno_repo = function() return vim.fs.dirname(vim.fs.find({'deno.json', 'deno.jsonc'}, { upward = true })[1]) ~= nil end
 
 nvim_lsp.tsserver.setup({
   on_attach = function(client, bufnr)
@@ -26,8 +26,8 @@ nvim_lsp.tsserver.setup({
     client.server_capabilities.document_formatting = false
     on_attach(client, bufnr)
   end,
-  root_dir = function()
-    return vim.fs.dirname(vim.fs.find({'package.json', 'package.jsonc'}, { upward = true })[1])
+  root_dir = function(fname)
+    return nvim_lsp.util.find_node_modules_ancestor(fname) or vim.loop.os_homedir()
   end,
   filetypes = {
     "javascript",
@@ -40,20 +40,22 @@ nvim_lsp.tsserver.setup({
   flags = {
     debounce_text_changes = 150,
   },
-  autostart = is_node_repo
+  autostart = not(is_deno_repo())
 })
 
 nvim_lsp.denols.setup({
   on_attach = on_attach,
   filetypes = {
     "javascript",
-    "typescript"
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
   },
   root_dir = function()
     return vim.fs.dirname(vim.fs.find({'deno.json', 'deno.jsonc'}, { upward = true })[1])
   end,
   single_file_support = false,
-  autostart = not(is_node_repo),
+  autostart = is_deno_repo(),
   init_options = { lint = true, unstable = true }
 })
 
