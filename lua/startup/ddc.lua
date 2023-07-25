@@ -52,7 +52,7 @@ vim.fn['ddc#custom#patch_global'] {
     _ = {
       ignoreCase = true,
       maxItems = 30,
-      minAutoCompleteLength = 0,
+      minAutoCompleteLength = 1,
       matchers = {'matcher_fuzzy'},
       sorters = {'sorter_fuzzy'},
       converters = {'converter_fuzzy'},
@@ -144,6 +144,14 @@ vim.keymap.set('n', ':', function()
     'cmdlineSources',
     {'cmdline', 'cmdline-history', 'path'}
   )
+
+  vim.fn['ddc#custom#patch_buffer'] {
+    sourceOptions = {
+      _ = {
+        minAutoCompleteLength = 0,
+      },
+    },
+  }
 
   vim.api.nvim_create_autocmd('User', {
     pattern = 'DDCCmdlineLeave',

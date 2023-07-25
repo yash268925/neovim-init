@@ -60,4 +60,4 @@ vim.keymap.set('t', '<C-w>n', '<C-\\><C-n>')
 
 vim.keymap.set('n', '<C-s>', '<Esc>:syntax sync fromstart<CR>', { silent = true })
 
-vim.cmd.colorscheme('iceberg')
+vim.cmd [[silent! colorscheme iceberg]]
