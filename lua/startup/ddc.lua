@@ -76,6 +76,7 @@ vim.fn['ddc#custom#patch_global'] {
     ['nvim-lsp'] = {
       mark = 'LSP',
       forceCompletionPattern = [[\.\w*|:\w*|->\w*]],
+      sorters = {'sorter_lsp-kind'},
     },
     cmdline = {
       mark = 'CMD',
@@ -142,7 +143,7 @@ vim.keymap.set('n', ':', function()
 
   vim.fn['ddc#custom#patch_buffer'](
     'cmdlineSources',
-    {'cmdline', 'cmdline-history', 'path'}
+    {'cmdline', 'path', 'cmdline-history'}
   )
 
   vim.fn['ddc#custom#patch_buffer'] {
@@ -183,3 +184,4 @@ vim.api.nvim_create_autocmd('CompleteDone', {
 })
 
 vim.fn['ddc#enable']()
+vim.fn['popup_preview#enable']()
