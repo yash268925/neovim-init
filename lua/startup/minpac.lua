@@ -47,6 +47,8 @@ local function init()
   -- ddu
   add('Shougo/ddu.vim')
   add('Shougo/ddu-ui-ff')
+  add('Shougo/ddu-ui-filer')
+  add('Shougo/ddu-source-file')
   add('Shougo/ddu-source-file_rec')
   add('matsui54/ddu-source-file_external')
   add('shun/ddu-source-rg')

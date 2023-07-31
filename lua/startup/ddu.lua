@@ -170,3 +170,96 @@ vim.keymap.set('n', ';b', function()
     }},
   }
 end, { silent = true }) 
+
+vim.keymap.set('n', 'to', function()
+  vim.fn['ddu#start'] {
+    name = 'filer',
+    ui = 'filer',
+    resume = true,
+    sources = {{
+      name = 'file',
+      params = {
+        ignoredDirectories = {'.git', 'node_modules', 'vendor'},
+      },
+    }},
+    uiParams = {
+      filer = {
+        split = 'no',
+        statusline = false,
+        previewFloating = true,
+        previewFloatingBorder = 'single',
+        previewHeight = 40,
+        previewWidth = 80,
+        previewRow = 10,
+        previewCol = 10,
+      },
+    },
+    sourceOptions = {
+      _ = {
+        columns = {'icon_filename', 'filename'},
+      },
+    },
+    kindOptions = {
+      file = {
+        defaultAction = 'open',
+      },
+    },
+    actionOptions = {
+      loclist = {
+        quit = false,
+      },
+    },
+  }
+end, { silent = true })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'ddu-filer',
+  callback = function()
+    vim.keymap.set('n', 'l',
+      [[<Cmd>call ddu#ui#do_action('expandItem')<CR>]],
+      { buffer = 0, silent = true }
+    )
+    vim.keymap.set('n', 'h',
+      [[<Cmd>call ddu#ui#do_action('collapseItem')<CR>]],
+      { buffer = 0, silent = true }
+    )
+
+    vim.keymap.set('n', 'p',
+      [[<Cmd>call ddu#ui#do_action('togglePreview')<CR>]],
+      { buffer = 0, silent = true }
+    )
+    vim.keymap.set('n', '<Enter>',
+      [[<Cmd>call ddu#ui#do_action('itemAction', {'name': 'open'})<CR>]],
+      { buffer = 0, silent = true }
+    )
+
+    vim.keymap.set('n', '<Space>',
+      [[<Cmd>call ddu#ui#do_action('toggleSelectItem')<CR>]],
+      { buffer = 0, silent = true }
+    )
+
+    vim.keymap.set('n', 'i',
+      [[<Cmd>call ddu#ui#do_action('itemAction', {'name': 'newFile'})<CR>]],
+      { buffer = 0, silent = true }
+    )
+    vim.keymap.set('n', 'o',
+      [[<Cmd>call ddu#ui#do_action('itemAction', {'name': 'newDirectory'})<CR>]],
+      { buffer = 0, silent = true }
+    )
+    vim.keymap.set('n', 'a',
+      [[<Cmd>call ddu#ui#do_action('inputAction')<CR>]],
+      { buffer = 0, silent = true }
+    )
+
+    vim.keymap.set('n', '.', function()
+      vim.fn['ddu#ui#do_action']('updateOptions', {
+        sourceOptions = {
+          _ = {
+            matchers = toggleHidden(vim.b.ddu_ui_name)
+          },
+        },
+      })
+      vim.fn['ddu#ui#do_action']('checkItems')
+    end, { expr = true, buffer = 0, silent = true })
+  end,
+})
