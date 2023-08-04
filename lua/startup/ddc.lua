@@ -1,27 +1,3 @@
-local normal_tab_after = {
-  [" "] = true,
-  ["{"] = true,
-  ["}"] = true,
-  ["("] = true,
-  [")"] = true,
-  ["["] = true,
-  ["]"] = true,
-  ["<"] = true,
-  [">"] = true,
-  [","] = true,
-  ["="] = true,
-}
-
-local function should_insert_normal_tab()
-  local col = vim.fn.col '.'
-  if col == 1 then
-    return true
-  end
-
-  local prev_char = vim.fn.getline('.'):sub(col - 1, col - 1)
-  return normal_tab_after[prev_char] or false
-end
-
 local buf_config = {}
 
 local function store_buffer_config()
@@ -116,24 +92,12 @@ vim.api.nvim_create_autocmd('User', {
   end,
 })
 
-vim.keymap.set('i', '<Tab>', function()
-  if vim.fn['pum#visible']() then
-    return '<Cmd>call pum#map#insert_relative(+1)<Cr>'
-  elseif should_insert_normal_tab() then
-    return '<Tab>'
-  end
-  vim.fn['ddc#map#manual_complete']()
-end, { expr = true, silent = true })
-
-vim.keymap.set('i', '<S-Tab>', '<Cmd>call pum#map#insert_relative(-1)<Cr>')
 vim.keymap.set('i', '<C-n>', '<Cmd>call pum#map#insert_relative(+1)<Cr>')
 vim.keymap.set('i', '<C-p>', '<Cmd>call pum#map#insert_relative(-1)<Cr>')
 vim.keymap.set('i', '<C-y>', '<Cmd>call pum#map#confirm()<Cr>')
 vim.keymap.set('i', '<C-e>', '<Cmd>call pum#map#cancel()<Cr>')
 
 vim.keymap.set('n', ':', function()
-  vim.keymap.set('c', '<Tab>',   '<Cmd>call pum#map#insert_relative(+1)<CR>')
-  vim.keymap.set('c', '<S-Tab>', '<Cmd>call pum#map#insert_relative(-1)<CR>')
   vim.keymap.set('c', '<C-n>',   '<Cmd>call pum#map#insert_relative(+1)<CR>')
   vim.keymap.set('c', '<C-p>',   '<Cmd>call pum#map#insert_relative(-1)<CR>')
   vim.keymap.set('c', '<C-y>',   '<Cmd>call pum#map#confirm()<CR>')
@@ -158,8 +122,6 @@ vim.keymap.set('n', ':', function()
     pattern = 'DDCCmdlineLeave',
     callback = function()
       vim.cmd[[
-        silent! cunmap <Tab>
-        silent! cunmap <S-Tab>
         silent! cunmap <C-n>
         silent! cunmap <C-p>
         silent! cunmap <C-y>
