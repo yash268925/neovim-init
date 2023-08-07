@@ -29,7 +29,7 @@ end
 local filetype = {
   'bash', 'shell', 'html', 'markdown',
   'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'json', 'json5', 'jsonc', 'vue', 'glsl',
-  'css', 'scss', 'rust', 'haskell', 'java', 'lua', 'make', 'vim', 'toml',
+  'css', 'scss', 'rust', 'haskell', 'java', 'lua', 'make', 'vim', 'toml', 'php',
 }
 
 vim.api.nvim_create_autocmd('FileType', {
