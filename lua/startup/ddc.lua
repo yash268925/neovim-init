@@ -16,6 +16,11 @@ local function restore_buffer_config()
   end
 end
 
+vim.fn['pum#set_option'] {
+  use_complete = true,
+  padding = true,
+}
+
 vim.fn['ddc#custom#patch_global'] {
   ui = 'pum',
   autoCompleteEvents = {
@@ -71,7 +76,7 @@ vim.fn['ddc#custom#patch_global'] {
       smartCase = true,
     },
     path = {
-      cmd = {'fd', '--max-depth', '5'},
+      cmd = { 'fd', '--max-depth', '7', '-I', '-H' },
       absolute = false,
     },
   },
@@ -105,12 +110,8 @@ vim.keymap.set('n', ':', function()
 
   store_buffer_config()
 
-  vim.fn['ddc#custom#patch_buffer'](
-    'cmdlineSources',
-    {'cmdline', 'path', 'cmdline-history'}
-  )
-
   vim.fn['ddc#custom#patch_buffer'] {
+    cmdlineSources = { 'cmdline', 'path', 'cmdline-history' },
     sourceOptions = {
       _ = {
         minAutoCompleteLength = 0,

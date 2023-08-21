@@ -22,6 +22,10 @@ local function init()
   add('editorconfig/editorconfig-vim')
   add('thinca/vim-quickrun')
   add('Shougo/pum.vim')
+  add('mattn/vim-molder')
+  add('mattn/vim-molder-operations')
+  add('lukas-reineke/indent-blankline.nvim')
+  add('itchyny/vim-qfedit')
 
   -- Plugins which use Denops
   add('vim-denops/denops.vim')

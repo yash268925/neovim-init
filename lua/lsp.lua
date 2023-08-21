@@ -11,6 +11,10 @@ function M.on_attach(on_attach)
 end
 
 function M.find_root(buf, pattern)
+  local root = vim.g['project_root']
+  if root then
+    return root
+  end
   pattern = pattern or { '.git' }
   local found = vim.fs.find(pattern, {
     upward = true,
