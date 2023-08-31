@@ -11,8 +11,6 @@ local function restore_buffer_config()
   if config then
     vim.fn['ddc#custom#set_buffer'](config)
     buf_config[bufnr] = nil
-  else
-    vim.fn['ddc#custom#set_buffer']({})
   end
 end
 
