@@ -57,6 +57,8 @@ vim.keymap.set('n', '<Space>p', '"+p')
 vim.keymap.set('v', '<Space>p', '"+p')
 
 vim.keymap.set('t', '<C-w>n', '<C-\\><C-n>')
+vim.keymap.set('t', '<ESC>', '<C-\\><C-n><Plug>(esc)')
+vim.keymap.set('n', '<Plug>(esc)<ESC>', 'i<ESC>')
 
 vim.keymap.set('n', '<C-s>', '<Esc>:syntax sync fromstart<CR>', { silent = true })
 
