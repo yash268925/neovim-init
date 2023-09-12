@@ -17,6 +17,8 @@ end
 vim.fn['pum#set_option'] {
   use_complete = true,
   padding = true,
+  max_height = 20,
+  scrollbar_char = '┃',
 }
 
 vim.fn['ddc#custom#patch_global'] {
