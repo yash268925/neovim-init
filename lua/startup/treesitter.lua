@@ -1,3 +1,29 @@
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+
+parser_config.markdown = {
+  install_info = {
+    url = "https://github.com/ibash/tree-sitter-markdown.git",
+    location = "tree-sitter-markdown",
+    files = { "src/parser.c", "src/scanner.c" },
+    revision = "ee0dac39fdbc8da1600756e5a19bf618cd79a47c",
+  },
+  maintainers = { "@MDeiml" },
+  readme_name = "markdown (basic highlighting)",
+  experimental = true,
+}
+
+parser_config.markdown_inline = {
+  install_info = {
+    url = "https://github.com/ibash/tree-sitter-markdown.git",
+    location = "tree-sitter-markdown-inline",
+    files = { "src/parser.c", "src/scanner.c" },
+    revision = "ee0dac39fdbc8da1600756e5a19bf618cd79a47c",
+  },
+  maintainers = { "@MDeiml" },
+  readme_name = "markdown_inline (needed for full highlighting)",
+  experimental = true,
+}
+
 local function setup()
   require('nvim-treesitter.configs').setup {
     ensure_installed = {
