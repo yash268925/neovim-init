@@ -1,5 +1,6 @@
 vim.loader.enable()
 
+require 'startup.local'
 require 'startup.base'
 require 'startup.minpac'
 require 'startup.lightline'
@@ -14,4 +15,3 @@ require 'startup.suda'
 require 'startup.skkeleton'
 require 'startup.ddc'
 require 'startup.ddu'
-require 'startup.local'

@@ -5,7 +5,7 @@ vim.g.lightline = {
       {'mode', 'paste'},
       {'readonly', 'filename', 'modified'},
       {'gitbranch', 'gittraffic'},
-    }, 
+    },
   },
   inactive = {
     left = {

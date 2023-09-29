@@ -64,10 +64,20 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = {'javascript', 'javascriptreact', 'typescript', 'typescriptreact'},
   callback = function(ev)
     local buf = ev.buf
+
     local deno_root = util.find_root(buf, { 'deno.json', 'deno.jsonc' })
-    local node_root = util.find_root(buf, { 'package.json', '.git' })
+    local node_root = util.find_root(buf, { 'package.json' })
+
     local client
-    if deno_root then
+    if node_root and not vim.g['is_deno'] then
+      client = vim.lsp.start({
+        name = 'tsserver',
+        cmd = { 'typescript-language-server', '--stdio' },
+        init_options = { hostInfo = 'neovim' },
+        root_dir = node_root,
+        single_file_support = true,
+      })
+    else
       client = vim.lsp.start({
         name = 'denols',
         cmd = { 'deno', 'lsp' },
@@ -89,14 +99,6 @@ vim.api.nvim_create_autocmd('FileType', {
             end
           end,
         },
-      })
-    else
-      client = vim.lsp.start({
-        name = 'tsserver',
-        cmd = { 'typescript-language-server', '--stdio' },
-        init_options = { hostInfo = 'neovim' },
-        root_dir = node_root,
-        single_file_support = true,
       })
     end
     vim.lsp.buf_attach_client(buf, client)
