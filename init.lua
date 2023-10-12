@@ -2,6 +2,7 @@ vim.loader.enable()
 
 require 'startup.local'
 require 'startup.base'
+require 'startup.term_title'
 require 'startup.minpac'
 require 'startup.lightline'
 require 'startup.oscyank'
