@@ -63,5 +63,6 @@ vim.keymap.set('n', '<Plug>(esc)<ESC>', 'i<ESC>')
 vim.keymap.set('n', '<C-s>', '<Esc>:syntax sync fromstart<CR>', { silent = true })
 
 vim.keymap.set('c', '<C-x>', [[<C-r>=expand('%:h')<CR>]])
+vim.keymap.set('c', '<C-c>', [[<C-r>=expand('%:p')<CR>]])
 
 vim.cmd [[silent! colorscheme iceberg]]
