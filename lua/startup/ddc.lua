@@ -15,7 +15,6 @@ local function restore_buffer_config()
 end
 
 vim.fn['pum#set_option'] {
-  use_complete = true,
   padding = true,
   max_height = 20,
   scrollbar_char = '┃',
@@ -28,7 +27,7 @@ vim.fn['ddc#custom#patch_global'] {
     'CmdlineEnter', 'CmdlineChanged',
   },
   backspaceCompletion = true,
-  sources = {'nvim-lsp', 'rg', 'file'},
+  sources = {'lsp', 'rg', 'file'},
   sourceOptions = {
     _ = {
       ignoreCase = true,
@@ -54,7 +53,7 @@ vim.fn['ddc#custom#patch_global'] {
       isVolatile = true,
       forceCompletionPattern = '\\S/\\S*',
     },
-    ['nvim-lsp'] = {
+    lsp = {
       mark = 'LSP',
       forceCompletionPattern = [[\.\w*|:\w*|->\w*]],
       sorters = {'sorter_lsp-kind'},
