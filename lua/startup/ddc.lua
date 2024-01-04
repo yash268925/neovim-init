@@ -75,7 +75,7 @@ vim.fn['ddc#custom#patch_global'] {
       smartCase = true,
     },
     path = {
-      cmd = { 'fd', '--max-depth', '7', '-I', '-H' },
+      cmd = { 'fd', '--max-depth', '8', '--max-results', '10000', '-H', '-I' },
       absolute = false,
     },
   },
