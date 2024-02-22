@@ -1,9 +1,11 @@
 vim.fn['skkeleton#config'] {
   eggLikeNewline = true,
-  globalJisyo = vim.fn.expand('$HOME/.skk/SKK-JISYO.L'),
-  immediatelyJisyoRW = true,
+  globalDictionaries = {
+    '~/.skk/SKK-JISYO.L',
+  },
+  immediatelyDictionaryRW = true,
   registerConvertResult = true,
-  userJisyo = vim.fn.expand('$HOME/.skk/userJisyo'),
+  userDictionary = '~/.skk/userJisyo',
 }
 
 vim.keymap.set('i', '<C-j>', '<Plug>(skkeleton-toggle)')

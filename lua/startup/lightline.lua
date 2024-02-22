@@ -24,12 +24,7 @@ vim.g.lightline = {
   component = {
     filename = '%n: %f',
   },
-  tabline = {
-    left = {{'tabs'}},
-    right = {},
-  },
-  tab = {
-    active = {'tabnum', 'filename'},
-    inactive = {'tabnum', 'filename'},
-  },
+  enable = {
+    tabline = 0
+  }
 }

@@ -26,7 +26,8 @@ vim.opt.laststatus = 2
 vim.opt.list = true
 vim.opt.listchars = { eol = '$', tab = '>-', space = '.' }
 vim.opt.equalalways = false
-vim.opt.showtabline = 2
+vim.opt.showtabline = 0
+vim.opt.sessionoptions = 'curdir,folds,globals,help,tabpages,terminal,winsize'
 
 
 vim.keymap.set('n', 's', '<Nop>')

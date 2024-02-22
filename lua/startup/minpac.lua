@@ -10,13 +10,14 @@ local function init()
   local add = vim.fn['minpac#add']
 
   init()
-  add('yash268925/iceberg.vim', { branch = 'feat/floating-window-border' })
+  add('yash268925/iceberg.vim')
   add('ojroques/vim-oscyank')
   add('drmingdrmer/vim-toggle-quickfix')
   add('nvim-treesitter/nvim-treesitter')
   add('neovim/nvim-lspconfig')
   add('drmingdrmer/vim-toggle-quickfix')
   add('itchyny/lightline.vim')
+  add('nanozuki/tabby.nvim')
   add('mhinz/vim-sayonara')
   add('airblade/vim-gitgutter')
   add('editorconfig/editorconfig-vim')
@@ -26,6 +27,7 @@ local function init()
   add('mattn/vim-molder-operations')
   add('lukas-reineke/indent-blankline.nvim')
   add('itchyny/vim-qfedit')
+  add('SmiteshP/nvim-navic')
 
   -- Plugins which use Denops
   add('vim-denops/denops.vim')
@@ -61,6 +63,8 @@ local function init()
   add('ryota2357/ddu-column-icon_filename')
   add('Shougo/ddu-filter-matcher_hidden')
   add('yuki-yano/ddu-filter-fzf')
+  add('k-ota106/ddu-source-marks')
+  add('kamecha/ddu-source-tab')
 
   return true
 end

@@ -7,18 +7,9 @@ end
 
 vim.fn['ddu#custom#patch_global'] {
   ui = 'ff',
-  sources = {{
-    name = 'file_rec',
-    params = {
-      ignoredDirectories = {'.git', 'node_modules', 'vendor'},
-    },
-  }},
   sourceOptions = {
     _ = {
-      matchers = {'matcher_hidden', 'matcher_fzf'},
-    },
-    file_rec = {
-      columns = {'icon_filename'},
+      matchers = { 'matcher_fzf' },
     },
   },
   kindOptions = {
@@ -45,6 +36,23 @@ vim.fn['ddu#custom#patch_global'] {
       highlightMatched = 'Search',
     },
   },
+}
+
+vim.fn['ddu#custom#patch_local']('file', {
+  sources = {{
+    name = 'file_rec',
+    params = {
+      ignoredDirectories = {'.git', 'node_modules', 'vendor'},
+    },
+  }},
+  sourceOptions = {
+    _ = {
+      matchers = {'matcher_hidden', 'matcher_fzf'},
+    },
+    file_rec = {
+      columns = {'icon_filename'},
+    },
+  },
   columnParams = {
     icon_filename = {
       defaultIcon = { icon = '' },
@@ -52,27 +60,44 @@ vim.fn['ddu#custom#patch_global'] {
       pathDisplayOption = 'relative',
     },
   },
-}
+})
 
 vim.fn['ddu#custom#patch_local']('rg', {
+  sources = {{
+    name = 'rg',
+    params = {
+      input = vim.fn.expand('<cword>'),
+    },
+  }},
   sourceParams = {
     rg = {
       args = {'--column', '--no-heading', '--color', 'never', '--json'},
     },
   },
-  uiParams = {
-    ff = {
-      startFilter = false,
-    },
-  },
 })
 
 vim.fn['ddu#custom#patch_local']('buffer', {
-  uiParams = {
-    ff = {
-      startFilter = false,
+  sources = {{
+    name = 'buffer',
+  }},
+})
+
+vim.fn['ddu#custom#patch_local']('tab', {
+  sources = {{
+    name = 'tab',
+    params = {
+      format = 'tab|%n: %w',
     },
-  },
+  }},
+})
+
+vim.fn['ddu#custom#patch_local']('mark', {
+  sources = {{
+    name = 'marks',
+    params = {
+      jumps = false,
+    },
+  }},
 })
 
 vim.api.nvim_create_autocmd({'TabEnter', 'CursorHold', 'FocusGained'}, {
@@ -90,7 +115,6 @@ local function toggle(array, needle)
   else
     table.insert(array, needle)
   end
-  print(vim.inspect(array))
   return array
 end
 
@@ -148,118 +172,8 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
-vim.keymap.set('n', ';f', [[<Cmd>call ddu#start({})<CR>]], { silent = true })
-
-vim.keymap.set('n', ';r', function()
-  vim.fn['ddu#start'] {
-    name = 'rg',
-    sources = {{
-      name = 'rg',
-      params = {
-        input = vim.fn.expand('<cword>'),
-      },
-    }},
-  }
-end, { silent = true })
-
-vim.keymap.set('n', ';b', function()
-  vim.fn['ddu#start'] {
-    name = 'buffer',
-    sources = {{
-      name = 'buffer',
-    }},
-  }
-end, { silent = true }) 
-
-vim.keymap.set('n', 'to', function()
-  vim.fn['ddu#start'] {
-    name = 'filer',
-    ui = 'filer',
-    resume = true,
-    sources = {{
-      name = 'file',
-      params = {
-        ignoredDirectories = {'.git', 'node_modules', 'vendor'},
-      },
-    }},
-    uiParams = {
-      filer = {
-        split = 'no',
-        statusline = false,
-        previewFloating = true,
-        previewFloatingBorder = 'single',
-        previewHeight = 40,
-        previewWidth = 80,
-        previewRow = 10,
-        previewCol = 10,
-      },
-    },
-    sourceOptions = {
-      _ = {
-        columns = {'icon_filename', 'filename'},
-      },
-    },
-    kindOptions = {
-      file = {
-        defaultAction = 'open',
-      },
-    },
-    actionOptions = {
-      loclist = {
-        quit = false,
-      },
-    },
-  }
-end, { silent = true })
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'ddu-filer',
-  callback = function()
-    vim.keymap.set('n', 'l',
-      [[<Cmd>call ddu#ui#do_action('expandItem')<CR>]],
-      { buffer = 0, silent = true }
-    )
-    vim.keymap.set('n', 'h',
-      [[<Cmd>call ddu#ui#do_action('collapseItem')<CR>]],
-      { buffer = 0, silent = true }
-    )
-
-    vim.keymap.set('n', 'p',
-      [[<Cmd>call ddu#ui#do_action('togglePreview')<CR>]],
-      { buffer = 0, silent = true }
-    )
-    vim.keymap.set('n', '<Enter>',
-      [[<Cmd>call ddu#ui#do_action('itemAction', {'name': 'open'})<CR>]],
-      { buffer = 0, silent = true }
-    )
-
-    vim.keymap.set('n', '<Space>',
-      [[<Cmd>call ddu#ui#do_action('toggleSelectItem')<CR>]],
-      { buffer = 0, silent = true }
-    )
-
-    vim.keymap.set('n', 'i',
-      [[<Cmd>call ddu#ui#do_action('itemAction', {'name': 'newFile'})<CR>]],
-      { buffer = 0, silent = true }
-    )
-    vim.keymap.set('n', 'o',
-      [[<Cmd>call ddu#ui#do_action('itemAction', {'name': 'newDirectory'})<CR>]],
-      { buffer = 0, silent = true }
-    )
-    vim.keymap.set('n', 'a',
-      [[<Cmd>call ddu#ui#do_action('inputAction')<CR>]],
-      { buffer = 0, silent = true }
-    )
-
-    vim.keymap.set('n', '.', function()
-      vim.fn['ddu#ui#do_action']('updateOptions', {
-        sourceOptions = {
-          _ = {
-            matchers = toggleHidden(vim.b.ddu_ui_name)
-          },
-        },
-      })
-      vim.fn['ddu#ui#do_action']('checkItems')
-    end, { expr = true, buffer = 0, silent = true })
-  end,
-})
+vim.keymap.set('n', ';f', [[<Cmd>call ddu#start({ 'name': 'file' })<CR>]],   { silent = true })
+vim.keymap.set('n', ';r', [[<Cmd>call ddu#start({ 'name': 'rg' })<CR>]],     { silent = true })
+vim.keymap.set('n', ';b', [[<Cmd>call ddu#start({ 'name': 'buffer' })<CR>]], { silent = true })
+vim.keymap.set('n', ';t', [[<Cmd>call ddu#start({ 'name': 'tab' })<CR>]],    { silent = true })
+vim.keymap.set('n', ';m', [[<Cmd>call ddu#start({ 'name': 'mark' })<CR>]],   { silent = true })
