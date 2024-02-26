@@ -1,8 +1,8 @@
+local split = require('lib').split
+
 vim.fn['skkeleton#config'] {
   eggLikeNewline = true,
-  globalDictionaries = {
-    '~/.skk/SKK-JISYO.L',
-  },
+  globalDictionaries = split(vim.fn.expand('~/.skk/dict/*'), '\n'),
   immediatelyDictionaryRW = true,
   registerConvertResult = true,
   userDictionary = '~/.skk/userJisyo',
