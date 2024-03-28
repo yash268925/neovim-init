@@ -165,8 +165,8 @@ vim.api.nvim_create_autocmd('FileType', {
       [[<Esc><Cmd>call ddu#ui#do_action('leaveFilterWindow')<CR>]],
       { buffer = 0, silent = true }
     )
-    vim.keymap.set('i', 'q',
-      [[<Esc><Cmd>call ddu#ui#do_action('quit')<CR>]],
+    vim.keymap.set('i', '<Esc>',
+      [[<Esc><Cmd>call ddu#ui#do_action('leaveFilterWindow')<CR>]],
       { buffer = 0, silent = true }
     )
   end,
