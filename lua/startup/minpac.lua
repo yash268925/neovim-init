@@ -28,6 +28,7 @@ local function init()
   add('lukas-reineke/indent-blankline.nvim')
   add('itchyny/vim-qfedit')
   add('SmiteshP/nvim-navic')
+  add('t9md/vim-quickhl')
 
   -- Plugins which use Denops
   add('vim-denops/denops.vim')
