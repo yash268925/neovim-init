@@ -29,6 +29,7 @@ local function init()
   add('SmiteshP/nvim-navic')
   add('t9md/vim-quickhl')
   add('chentoast/marks.nvim')
+  add('tani/dmacro.nvim')
 
   -- Plugins which use Denops
   add('vim-denops/denops.vim')
