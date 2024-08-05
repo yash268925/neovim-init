@@ -50,7 +50,7 @@ local function init()
   add('Shougo/ddc-source-cmdline-history')
   add('Shougo/ddc-source-rg')
   add('matsui54/denops-popup-preview.vim')
-  add('takker99/ddc-bitap.git')
+  add('takker99/ddc-bitap')
 
   -- ddu
   add('Shougo/ddu.vim')
