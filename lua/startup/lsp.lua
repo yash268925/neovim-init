@@ -10,6 +10,7 @@ util.on_attach(function(client, buf)
   vim.keymap.set('n', 'gx', '<Cmd>lua vim.diagnostic.open_float()<CR>', { buffer = buf, silent = true })
   vim.keymap.set('n', 'g[', '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', { buffer = buf, silent = true })
   vim.keymap.set('n', 'g]', '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>', { buffer = buf, silent = true })
+  vim.keymap.set('n', 'gA', '<Cmd>lua vim.lsp.buf.code_action()<CR>', { buffer = buf, silent = true })
 
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, buf)

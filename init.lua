@@ -1,5 +1,7 @@
 vim.loader.enable()
 
+vim.g['skkeleton#switch_key'] = '<C-j>'
+
 require 'startup.local'
 require 'startup.base'
 require 'startup.term_title'
@@ -18,3 +20,4 @@ require 'startup.suda'
 require 'startup.skkeleton'
 require 'startup.ddc'
 require 'startup.ddu'
+--require 'startup.ddu_new'

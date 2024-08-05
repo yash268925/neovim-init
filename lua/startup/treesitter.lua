@@ -1,6 +1,7 @@
 local function setup()
   require('nvim-treesitter.configs').setup {
     ensure_installed = {
+      'djot',
       'javascript', 'jsdoc', 'typescript', 'tsx',
       'bash', 'css', 'scss', 'rust',
       'lua', 'html', 'json', 'php',
@@ -34,7 +35,7 @@ local function setup()
 end
 
 local filetype = {
-  'bash', 'shell', 'html', 'markdown',
+  'bash', 'shell', 'html', 'markdown', 'djot',
   'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'json', 'json5', 'jsonc', 'vue', 'glsl',
   'css', 'scss', 'rust', 'haskell', 'java', 'lua', 'make', 'vim', 'toml', 'php',
 }

@@ -33,8 +33,8 @@ vim.fn['ddc#custom#patch_global'] {
       ignoreCase = true,
       maxItems = 30,
       minAutoCompleteLength = 1,
-      matchers = {'matcher_fuzzy'},
-      sorters = {'sorter_fuzzy'},
+      matchers = {'matcher_bitap'},
+      sorters = {'sorter_bitap'},
       converters = {'converter_fuzzy'},
     },
     skkeleton = {
@@ -58,13 +58,6 @@ vim.fn['ddc#custom#patch_global'] {
       forceCompletionPattern = [[\.\w*|:\w*|->\w*]],
       sorters = {'sorter_lsp-kind'},
     },
-    cmdline = {
-      mark = 'CMD',
-      isVolatile = true,
-    },
-    ['cmdline-history'] = {
-      mark = 'CMD(H)',
-    },
     rg = {
       mark = 'RG',
       minAutoCompleteLength = 4,
@@ -74,9 +67,10 @@ vim.fn['ddc#custom#patch_global'] {
     file = {
       smartCase = true,
     },
-    path = {
-      cmd = { 'fd', '--max-depth', '8', '--max-results', '10000', '-H', '-I' },
-      absolute = false,
+  },
+  filterParams = {
+    matcher_fuzzy = {
+      splitMode = 'character',
     },
   },
 }
@@ -115,6 +109,19 @@ vim.keymap.set('n', ':', function()
       _ = {
         minAutoCompleteLength = 0,
       },
+      cmdline = {
+        mark = 'CMD',
+        isVolatile = true,
+      },
+      ['cmdline-history'] = {
+        mark = 'CMD(H)',
+      },
+    },
+    sourceParams = {
+      path = {
+        cmd = { 'fd', '--max-results', '100000' },
+        absolute = false,
+      },
     },
   }
 
@@ -140,7 +147,6 @@ end, { expr = true })
 
 vim.api.nvim_create_autocmd('CompleteDone', {
   callback = function()
-    print('test')
     vim.cmd.pclose({ bang = true })
   end
 })

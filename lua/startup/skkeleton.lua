@@ -8,8 +8,15 @@ vim.fn['skkeleton#config'] {
   userDictionary = '~/.skk/userJisyo',
 }
 
-vim.keymap.set('i', '<C-j>', '<Plug>(skkeleton-toggle)')
-vim.keymap.set('c', '<C-j>', '<Plug>(skkeleton-toggle)')
+local switchKey = vim.g['skkeleton#switch_key']
+
+if not switchKey then
+  switchKey = '<C-j>'
+end
+
+vim.keymap.set('i', switchKey, '<Plug>(skkeleton-toggle)')
+vim.keymap.set('c', switchKey, '<Plug>(skkeleton-toggle)')
+vim.keymap.set('t', switchKey, '<Plug>(skkeleton-toggle)')
 
 vim.cmd([[
   hi SkkeletonIndicatorEiji guifg=#88c0d0 guibg=#2e3440 gui=bold

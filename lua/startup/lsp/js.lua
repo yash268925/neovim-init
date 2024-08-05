@@ -75,7 +75,7 @@ vim.api.nvim_create_autocmd('FileType', {
         cmd = { 'typescript-language-server', '--stdio' },
         init_options = { hostInfo = 'neovim' },
         root_dir = node_root,
-        single_file_support = true,
+        single_file_support = false,
       })
     else
       client = vim.lsp.start({
@@ -86,6 +86,7 @@ vim.api.nvim_create_autocmd('FileType', {
           enable = true,
           unstable = true,
         },
+        single_file_support = false,
         root_dir = deno_root,
         handlers = {
           ['textDocument/definition'] = denols_handler,
