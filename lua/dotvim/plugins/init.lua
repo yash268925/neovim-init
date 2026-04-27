@@ -19,4 +19,6 @@ require('dotvim.plugins.claude-code-aibo')
 require('dotvim.plugins.skkeleton')
 require('dotvim.plugins.gin')
 
+require('dotvim.plugins.md-render')
+
 vim.cmd.packadd('nvim.undotree')

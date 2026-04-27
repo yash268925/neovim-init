@@ -42,4 +42,6 @@ o.listchars = { eol = '$', tab = '>-', space = '.' }
 
 o.winborder = 'single'
 
+o.shell = 'fish'
+
 vim.cmd.filetype('plugin indent on')

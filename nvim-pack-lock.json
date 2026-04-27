@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "budoux.lua": {
+      "rev": "7f23658b127b9a74aae5b388fefcd997be30cbfc",
+      "src": "https://github.com/delphinus/budoux.lua"
+    },
     "ccc.nvim": {
       "rev": "9d1a256e006decc574789dfc7d628ca11644d4c2",
       "src": "https://github.com/uga-rosa/ccc.nvim"
@@ -11,6 +15,10 @@
     "fidget.nvim": {
       "rev": "889e2e96edef4e144965571d46f7a77bcc4d0ddf",
       "src": "https://github.com/j-hui/fidget.nvim"
+    },
+    "md-render.nvim": {
+      "rev": "f24642dc2a466f4568dc2b919a343880e863320f",
+      "src": "https://github.com/delphinus/md-render.nvim"
     },
     "mini.bufremove": {
       "rev": "8603490905fdfa31943cf2ede7ef4475e3dbac9a",
@@ -29,7 +37,7 @@
       "src": "https://github.com/echasnovski/mini.files"
     },
     "mini.icons": {
-      "rev": "7fdae2443a0e2910015ca39ad74b50524ee682d3",
+      "rev": "bac6317300e205335df425296570d84322730067",
       "src": "https://github.com/echasnovski/mini.icons"
     },
     "mini.indentscope": {
@@ -57,7 +65,7 @@
       "src": "https://github.com/hrsh7th/nvim-ix"
     },
     "nvim-lspconfig": {
-      "rev": "8a9378a822719346a0288fa004dab302ca3c0a8f",
+      "rev": "e05fb8c3bd61d909dacff24f77f23beb644daf54",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -98,7 +106,7 @@
       "src": "https://github.com/drmingdrmer/vim-toggle-quickfix"
     },
     "vimdoc-ja": {
-      "rev": "4dbf3f44ddc71c41f4f075970ce07e7c873b551b",
+      "rev": "ee16ecb8f802287302ff0317e52e27c274c16194",
       "src": "https://github.com/vim-jp/vimdoc-ja"
     }
   }

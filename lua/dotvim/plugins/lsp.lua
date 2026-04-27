@@ -11,6 +11,7 @@ vim.lsp.enable({
   'jsonls',
   'oxfmt',
   'oxlint',
+  'dartls',
 })
 
 local keymaps = require('dotvim.utils').keymaps
