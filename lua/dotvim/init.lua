@@ -1,7 +1,6 @@
 require('dotvim.configs')
 require('dotvim.keymaps')
 require('dotvim.plugins')
-require('dotvim.pickers')
 
 vim.cmd.packadd('nohlsearch')
 

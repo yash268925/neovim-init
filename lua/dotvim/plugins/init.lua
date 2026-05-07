@@ -2,6 +2,7 @@ require('dotvim.plugins.fidget')
 
 require('dotvim.plugins.mini')
 
+require('dotvim.plugins.deck-picker')
 require('dotvim.plugins.colorscheme')
 require('dotvim.plugins.statusline')
 require('dotvim.plugins.lsp')

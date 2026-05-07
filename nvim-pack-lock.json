@@ -60,6 +60,10 @@
       "rev": "b2f8930ed9d2ee7c1269202e884972a039173c0d",
       "src": "https://github.com/hrsh7th/nvim-cmp-kit"
     },
+    "nvim-deck": {
+      "rev": "d4bb2043c4b62db516f8ccee4a184295a31e00fd",
+      "src": "https://github.com/hrsh7th/nvim-deck"
+    },
     "nvim-ix": {
       "rev": "2fc2886eb9e2411d92c8ce6b4782b9a8fe14106d",
       "src": "https://github.com/hrsh7th/nvim-ix"
