@@ -174,15 +174,6 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 vim.api.nvim_create_autocmd('User', {
-  pattern = 'DeckStart:grep',
-  callback = function(e)
-    local ctx = e.data.ctx --[[@as deck.Context]]
-
-    ctx.prompt()
-  end
-})
-
-vim.api.nvim_create_autocmd('User', {
   pattern = 'DeckStart:explorer',
   callback = function(e)
     local ctx = e.data.ctx --[[@as deck.Context]]
