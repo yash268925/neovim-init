@@ -9,6 +9,7 @@ vim.lsp.enable({
   'cssls',
   'html',
   'jsonls',
+  'tombi',
   'oxfmt',
   'oxlint',
   'dartls',
