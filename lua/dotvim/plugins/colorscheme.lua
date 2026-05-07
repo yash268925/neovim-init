@@ -4,6 +4,7 @@ vim.pack.add({
 
 require('nightfox').setup({
   options = {
+    transparent = true,
     styles = {
       conditionals = 'italic',
       keywords = 'italic',
@@ -11,17 +12,11 @@ require('nightfox').setup({
   },
 })
 
+vim.o.termguicolors = true
+vim.o.winblend = 4
+
 vim.cmd.colorscheme('nordfox')
 
-local hl_set = require('dotvim.utils').hl_set
-
-hl_set({
-  Normal = { bg = 'NONE' },
-  NormalNC = { bg = 'NONE' },
-})
-
-local nordfox = require('nightfox.palette.nordfox')
-
 return {
-  palette = nordfox.palette
+  palette = require('nightfox.palette').load('nordfox')
 }

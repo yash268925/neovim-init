@@ -4,7 +4,17 @@ vim.pack.add({
 
 local aibo = require('aibo')
 
-aibo.setup()
+aibo.setup({
+  termcode_mode = 'csi-n',
+  prompt = {
+    on_attach = function(bufnr)
+      local opts = { buffer = bufnr, nowait = true, silent = true }
+      -- Add custom mappings using <Plug>(aibo-send) pattern
+      vim.keymap.set({ 'n', 'i' }, '<C-j>', '<Plug>(aibo-send)<Down>', opts)
+      vim.keymap.set({ 'n', 'i' }, '<C-k>', '<Plug>(aibo-send)<Up>', opts)
+    end,
+  },
+})
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'aibo-*',
