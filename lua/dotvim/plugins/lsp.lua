@@ -12,6 +12,7 @@ vim.lsp.enable({
   'oxfmt',
   'oxlint',
   'dartls',
+  'phpantom_lsp',
 })
 
 local keymaps = require('dotvim.utils').keymaps
