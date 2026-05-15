@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 local function toggle_claude()
   local width = math.floor(vim.o.columns * 1 / 3)
-  vim.cmd(string.format('Aibo -stay -toggle -opener="botright %dvsplit" claude', width))
+  vim.cmd(string.format('Aibo -toggle -opener="botright %dvsplit" claude', width))
 end
 
 local keymaps = require('dotvim.utils').keymaps
