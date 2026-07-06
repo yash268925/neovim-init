@@ -4,13 +4,19 @@
 // 使い方(プロジェクトルートで):
 //   ./gradlew -I ~/.config/nvim/jdtls/android-libs.init.gradle :app:jdtlsLibs
 //
+// バリアント(build type / flavor)は -Pjdtls.variant で指定する(既定 debug)。
+// product flavor があるプロジェクトでは flavor+buildType を camelCase で渡す:
+//   ./gradlew -I ~/.config/nvim/jdtls/android-libs.init.gradle -Pjdtls.variant=demoDebug :app:jdtlsLibs
+// この値は .nvim.lua の vim.g.dotvim_jdtls.android.variant と一致させること
+// (R.jar/buildConfig が同一バリアントを指す必要がある)。
+//
 // 出力先: ~/.cache/nvim/jdtls-libs/<ルートディレクトリ名>-<モジュール名>.txt
 //
 // build.gradleの依存を変えたらこれを再実行する。次回nvimでjavaファイルを開いたときに
 // .classpath が自動再生成される(jdtlsが既に起動中なら再起動が必要)。
 //
 // 注意: R.jar は aapt のリソース処理で生成されるため、一度もビルドしていない場合は
-//   ./gradlew :app:processDebugResources
+//   ./gradlew :app:process<Variant>Resources   (例 processDebugResources)
 // を先に実行しておくこと。
 
 gradle.projectsEvaluated {
@@ -21,6 +27,9 @@ gradle.projectsEvaluated {
         }
         p.tasks.register('jdtlsLibs') {
             doLast {
+                // 対象バリアント(build type / flavor)。既定は debug。
+                // 例: -Pjdtls.variant=demoDebug
+                def variant = (p.findProperty('jdtls.variant') ?: 'debug').toString()
                 def lines = []
 
                 // android.jar(コンパイルSDKのブートクラスパス)
@@ -35,18 +44,18 @@ gradle.projectsEvaluated {
                     lines << lambdaStubs.absolutePath
                 }
 
-                // R.jar(aapt生成のリソースIDクラス。debugバリアントのもの)
-                def rJarDir = new File(p.layout.buildDirectory.get().asFile, 'intermediates/compile_and_runtime_r_class_jar/debug')
+                // R.jar(aapt生成のリソースIDクラス。対象バリアントのもの)
+                def rJarDir = new File(p.layout.buildDirectory.get().asFile, "intermediates/compile_and_runtime_r_class_jar/${variant}")
                 def rJars = rJarDir.exists() ? p.fileTree(dir: rJarDir, include: '**/R.jar').files : []
                 if (rJars.empty) {
-                    logger.warn("jdtlsLibs: R.jar が見つかりません(${rJarDir})。./gradlew :${p.name}:processDebugResources を先に実行してください。")
+                    logger.warn("jdtlsLibs: R.jar が見つかりません(${rJarDir})。./gradlew :${p.name}:process${variant.capitalize()}Resources を先に実行してください。")
                 }
                 rJars.each { lines << it.absolutePath }
 
                 // 依存ライブラリ。AARのままではjdtが読めないため、artifactViewで
                 // クラスJAR(android-classes-jar)に変換されたものを解決する。
                 def artifactType = Attribute.of('artifactType', String)
-                def jars = p.configurations.getByName('debugCompileClasspath').incoming
+                def jars = p.configurations.getByName("${variant}CompileClasspath").incoming
                         .artifactView { it.attributes.attribute(artifactType, 'android-classes-jar') }
                         .files.files.sort()
                 jars.each { lines << it.absolutePath }
