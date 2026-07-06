@@ -1,5 +1,6 @@
 vim.pack.add({
-  { src = 'https://github.com/neovim/nvim-lspconfig' }
+  { src = 'https://github.com/neovim/nvim-lspconfig' },
+  'https://github.com/mfussenegger/nvim-jdtls',
 })
 
 vim.lsp.enable({

@@ -68,6 +68,10 @@
       "rev": "2fc2886eb9e2411d92c8ce6b4782b9a8fe14106d",
       "src": "https://github.com/hrsh7th/nvim-ix"
     },
+    "nvim-jdtls": {
+      "rev": "6e9d953f0b82bccdb834cfde0e893f3119c22592",
+      "src": "https://github.com/mfussenegger/nvim-jdtls"
+    },
     "nvim-lspconfig": {
       "rev": "e05fb8c3bd61d909dacff24f77f23beb644daf54",
       "src": "https://github.com/neovim/nvim-lspconfig"

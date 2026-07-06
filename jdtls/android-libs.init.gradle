@@ -1,0 +1,62 @@
+// jdtls用: AndroidモジュールのコンパイルクラスパスをJARパスの一覧として書き出す。
+// ftplugin/java.lua がこの一覧から .classpath を生成する。
+//
+// 使い方(プロジェクトルートで):
+//   ./gradlew -I ~/.config/nvim/jdtls/android-libs.init.gradle :app:jdtlsLibs
+//
+// 出力先: ~/.cache/nvim/jdtls-libs/<ルートディレクトリ名>-<モジュール名>.txt
+//
+// build.gradleの依存を変えたらこれを再実行する。次回nvimでjavaファイルを開いたときに
+// .classpath が自動再生成される(jdtlsが既に起動中なら再起動が必要)。
+//
+// 注意: R.jar は aapt のリソース処理で生成されるため、一度もビルドしていない場合は
+//   ./gradlew :app:processDebugResources
+// を先に実行しておくこと。
+
+gradle.projectsEvaluated {
+    gradle.rootProject.allprojects { p ->
+        def isAndroid = p.plugins.hasPlugin('com.android.application') || p.plugins.hasPlugin('com.android.library')
+        if (!isAndroid) {
+            return
+        }
+        p.tasks.register('jdtlsLibs') {
+            doLast {
+                def lines = []
+
+                // android.jar(コンパイルSDKのブートクラスパス)
+                p.android.bootClasspath.each { lines << it.absolutePath }
+
+                // LambdaMetafactoryのスタブ。android.jarには含まれない(実機では
+                // desugaringされる)ため、これが無いとラムダを含むコードのjdt診断で
+                // "LambdaMetafactory cannot be resolved" が出る。
+                def lambdaStubs = new File(p.android.sdkDirectory,
+                        "build-tools/${p.android.buildToolsVersion}/core-lambda-stubs.jar")
+                if (lambdaStubs.exists()) {
+                    lines << lambdaStubs.absolutePath
+                }
+
+                // R.jar(aapt生成のリソースIDクラス。debugバリアントのもの)
+                def rJarDir = new File(p.layout.buildDirectory.get().asFile, 'intermediates/compile_and_runtime_r_class_jar/debug')
+                def rJars = rJarDir.exists() ? p.fileTree(dir: rJarDir, include: '**/R.jar').files : []
+                if (rJars.empty) {
+                    logger.warn("jdtlsLibs: R.jar が見つかりません(${rJarDir})。./gradlew :${p.name}:processDebugResources を先に実行してください。")
+                }
+                rJars.each { lines << it.absolutePath }
+
+                // 依存ライブラリ。AARのままではjdtが読めないため、artifactViewで
+                // クラスJAR(android-classes-jar)に変換されたものを解決する。
+                def artifactType = Attribute.of('artifactType', String)
+                def jars = p.configurations.getByName('debugCompileClasspath').incoming
+                        .artifactView { it.attributes.attribute(artifactType, 'android-classes-jar') }
+                        .files.files.sort()
+                jars.each { lines << it.absolutePath }
+
+                def out = new File(System.getProperty('user.home'),
+                        ".cache/nvim/jdtls-libs/${p.rootProject.projectDir.name}-${p.name}.txt")
+                out.parentFile.mkdirs()
+                out.text = lines.join('\n') + '\n'
+                println "jdtlsLibs: ${lines.size()} entries -> ${out}"
+            }
+        }
+    }
+}
