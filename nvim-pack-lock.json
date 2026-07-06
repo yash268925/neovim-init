@@ -17,7 +17,7 @@
       "src": "https://github.com/j-hui/fidget.nvim"
     },
     "md-render.nvim": {
-      "rev": "f24642dc2a466f4568dc2b919a343880e863320f",
+      "rev": "cd751c984198a891d9d6748800a1d3d2815e8d9d",
       "src": "https://github.com/delphinus/md-render.nvim"
     },
     "mini.bufremove": {
