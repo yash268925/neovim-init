@@ -64,13 +64,29 @@ if android_module_dir then
   if vim.fn.filereadable(libs_cache) == 1 then
     local project_file = android_module_dir .. '/.project'
     local classpath_file = android_module_dir .. '/.classpath'
+    local buildship_prefs = android_module_dir .. '/.settings/org.eclipse.buildship.core.prefs'
 
-    -- .classpathがlibsキャッシュより古い(または存在しない)場合のみ再生成する。
+    -- Buildshipはgradle.enabled=falseを渡していても、.settings/org.eclipse.
+    -- buildship.core.prefs(auto.sync=true)が既に存在すると「Gradleリンク済み
+    -- プロジェクト」とみなして同期を行い、.project/.classpathをGradle依存の
+    -- 内容で上書きしてしまう(このプロジェクトのGradleImporterを無効化する
+    -- 設定より、既存prefsによるリンク状態が優先される)。一度これが起きると
+    -- 壊れた.classpathの方がlibsキャッシュより新しくなり、以降は再生成条件に
+    -- 掛からず壊れたまま固定されてしまうため、prefsの存在自体も再生成のトリガー
+    -- にし、実ファイルも削除する。
+    local buildship_polluted = vim.fn.filereadable(buildship_prefs) == 1
+
+    -- .classpathがlibsキャッシュより古い(または存在しない)、もしくは
+    -- Buildshipに汚染されている場合のみ再生成する。
     if
       vim.fn.filereadable(project_file) == 0
       or vim.fn.filereadable(classpath_file) == 0
       or vim.fn.getftime(classpath_file) < vim.fn.getftime(libs_cache)
+      or buildship_polluted
     then
+      if buildship_polluted then
+        vim.fn.delete(buildship_prefs)
+      end
       vim.fn.writefile({
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<projectDescription>',
