@@ -32,13 +32,23 @@ gradle.projectsEvaluated {
                 def variant = (p.findProperty('jdtls.variant') ?: 'debug').toString()
                 def lines = []
 
-                // android.jar(コンパイルSDKのブートクラスパス)
-                p.android.bootClasspath.each { lines << it.absolutePath }
+                // android.jar(コンパイルSDKのブートクラスパス)。
+                // AGP 9 で android.bootClasspath / android.sdkDirectory が拡張DSLから
+                // 削除されたため、公開APIの androidComponents.sdkComponents から SDK
+                // ディレクトリを取得し、compileSdkVersion(例 android-36)配下の
+                // android.jar を直接指す(AGP 7.2+〜9 で共通に動く)。
+                def sdkDir = p.extensions.getByName('androidComponents').sdkComponents.sdkDirectory.get().asFile
+                def androidJar = new File(sdkDir, "platforms/${p.android.compileSdkVersion}/android.jar")
+                if (androidJar.exists()) {
+                    lines << androidJar.absolutePath
+                } else {
+                    logger.warn("jdtlsLibs: android.jar が見つかりません(${androidJar})。compileSdk(${p.android.compileSdkVersion})のプラットフォームをインストールしてください。")
+                }
 
                 // LambdaMetafactoryのスタブ。android.jarには含まれない(実機では
                 // desugaringされる)ため、これが無いとラムダを含むコードのjdt診断で
                 // "LambdaMetafactory cannot be resolved" が出る。
-                def lambdaStubs = new File(p.android.sdkDirectory,
+                def lambdaStubs = new File(sdkDir,
                         "build-tools/${p.android.buildToolsVersion}/core-lambda-stubs.jar")
                 if (lambdaStubs.exists()) {
                     lines << lambdaStubs.absolutePath
