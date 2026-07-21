@@ -53,7 +53,7 @@
       "src": "https://github.com/EdenEast/nightfox.nvim"
     },
     "nvim-aibo": {
-      "rev": "bcbeab88c27cf831a08661eace7a928b2bba5694",
+      "rev": "0505c2ef5471d43fb48df5823ede9705b9c9e73e",
       "src": "https://github.com/lambdalisue/nvim-aibo"
     },
     "nvim-cmp-kit": {

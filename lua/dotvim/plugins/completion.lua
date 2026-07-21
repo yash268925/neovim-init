@@ -43,13 +43,44 @@ end
 
 local ix = require('ix')
 
+-- aibo prompt buffers get their own completion sources (see
+-- lua/dotvim/completion/aibo-*.lua) instead of the default LSP/buffer/path
+-- set, which make no sense in a chat prompt.
+local default_insert_mode = ix.get_default_config().attach.insert_mode
+
+local function is_aibo_prompt(bufnr)
+  return vim.api.nvim_buf_get_name(bufnr):match('^aiboprompt://') ~= nil
+end
+
+local function attach_aibo_sources(service)
+  -- e.g. filetype "aibo-prompt.aibo-tool-claude" -> "claude"
+  -- (aibo.completion.claude / .codex / .gemini all share the same interface)
+  local module_name = vim.bo.filetype:match('aibo%-tool%-([%w_]+)')
+  if module_name then
+    local ok, slash_source = pcall(require('dotvim.completion.aibo-slash'), module_name)
+    if ok then
+      service:register_source(slash_source, { group = 1 })
+    end
+  end
+  service:register_source(require('dotvim.completion.aibo-file')(), { group = 1 })
+end
+
 ix.setup({
   expand_snippet = function(body) vim.snippet.expand(body) end,
   completion = {
     icon_resolver = function(kind)
       return kinds_lookup[kind] or { '', '' }
     end,
-  }
+  },
+  attach = {
+    insert_mode = function()
+      if is_aibo_prompt(vim.api.nvim_get_current_buf()) then
+        attach_aibo_sources(ix.get_completion_service({ recreate = true }))
+      else
+        default_insert_mode()
+      end
+    end,
+  },
 })
 
 local keymaps = require('dotvim.utils').keymaps
