@@ -86,10 +86,29 @@ local function toggle_claude(args)
     return
   end
 
+  -- デフォルトで ~/.claude/agents/orchestrator を起動する。
+  -- ただし :Claude 側で明示的に --agent が渡された場合はそちらを尊重する。
+  -- `--agent=` (空値) を渡すと、agent指定なしで起動する合図として扱う
+  -- (このトークン自体は claude には渡さず取り除く)。
+  local raw_args = (args and args ~= '') and args or ''
+  local no_agent = false
+  local words = {}
+  for _, word in ipairs(vim.split(raw_args, '%s+', { trimempty = true })) do
+    if word == '--agent=' then
+      no_agent = true
+    else
+      table.insert(words, word)
+    end
+  end
+  local claude_args = table.concat(words, ' ')
+  if not no_agent and not claude_args:match('%-%-agent%f[%A]') then
+    claude_args = vim.trim('--agent orchestrator ' .. claude_args)
+  end
+
   local width = math.floor(vim.o.columns * 1 / 3)
   local cmd = string.format('Aibo -toggle -opener="botright %dvsplit" claude', width)
-  if args and args ~= '' then
-    cmd = cmd .. ' ' .. args
+  if claude_args ~= '' then
+    cmd = cmd .. ' ' .. claude_args
   end
   vim.cmd(cmd)
 
@@ -98,7 +117,7 @@ local function toggle_claude(args)
   -- internal モジュールの形が変わると壊れうる点は留意。
   local ok, console = pcall(require, 'aibo.internal.console_window')
   if ok then
-    local parsed_args = (args and args ~= '') and vim.split(args, '%s+') or {}
+    local parsed_args = claude_args ~= '' and vim.split(claude_args, '%s+') or {}
     local info = console.find_info_globally({ cmd = 'claude', args = parsed_args })
     if info then
       claude_state.bufnr = info.bufnr
