@@ -72,6 +72,29 @@ vim.api.nvim_create_autocmd('FileType', {
 -- window内に見えていれば閉じるだけにすることで、引数によらないトグルにする。
 local claude_state = { bufnr = nil }
 
+-- デフォルトで起動するエージェント名。
+-- nil にすると、エージェント指定なしで :Claude を起動する。
+local default_agent = 'orchestrator'
+
+-- 環境によっては ~/.claude/ を同期できておらず、エージェント定義が存在しない
+-- ことがある (存在しない --agent を渡すと claude が起動時にエラーになる)。
+-- そこでユーザ/プロジェクトレベルの定義ファイルを実際に探しに行き、
+-- 見つかったときだけ --agent を付ける。
+local function agent_exists(name)
+  if vim.uv.fs_stat(vim.fs.joinpath(vim.fn.expand('~/.claude/agents'), name .. '.md')) then
+    return true
+  end
+  -- プロジェクトローカル定義 (.claude/agents/<name>.md) を上位ディレクトリまで探索
+  -- (vim.fs.find の names はベース名しか受け付けないため自前で辿る)
+  local cwd = vim.fn.getcwd()
+  for _, dir in ipairs(vim.list_extend({ cwd }, vim.iter(vim.fs.parents(cwd)):totable())) do
+    if vim.uv.fs_stat(vim.fs.joinpath(dir, '.claude', 'agents', name .. '.md')) then
+      return true
+    end
+  end
+  return false
+end
+
 local function is_claude_win_visible()
   return claude_state.bufnr ~= nil
     and vim.api.nvim_buf_is_valid(claude_state.bufnr)
@@ -86,7 +109,7 @@ local function toggle_claude(args)
     return
   end
 
-  -- デフォルトで ~/.claude/agents/orchestrator を起動する。
+  -- デフォルトで ~/.claude/agents/<default_agent> を起動する。
   -- ただし :Claude 側で明示的に --agent が渡された場合はそちらを尊重する。
   -- `--agent=` (空値) を渡すと、agent指定なしで起動する合図として扱う
   -- (このトークン自体は claude には渡さず取り除く)。
@@ -101,8 +124,10 @@ local function toggle_claude(args)
     end
   end
   local claude_args = table.concat(words, ' ')
-  if not no_agent and not claude_args:match('%-%-agent%f[%A]') then
-    claude_args = vim.trim('--agent orchestrator ' .. claude_args)
+  if not no_agent and default_agent and not claude_args:match('%-%-agent%f[%A]') then
+    if agent_exists(default_agent) then
+      claude_args = vim.trim(('--agent %s '):format(default_agent) .. claude_args)
+    end
   end
 
   local width = math.floor(vim.o.columns * 1 / 3)
