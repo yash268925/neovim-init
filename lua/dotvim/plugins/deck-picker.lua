@@ -3,6 +3,16 @@ vim.pack.add({ 'https://github.com/hrsh7th/nvim-deck' })
 local deck = require('deck')
 local kit = require('deck.kit')
 
+-- 既定の bottom_picker は最下段に split を作るため、laststatus=3 と winfixheight ウィンドウの
+-- 組み合わせで Neovim 側のバグにより wfh ウィンドウが 1 行ずつ伸びる。float なら発生しない。
+deck.setup({
+  default_start_config = {
+    get_view = function()
+      return require('deck.builtin.view.float_picker')()
+    end,
+  },
+})
+
 local ignore_globs = {
   '**/node_modules/**',
   '**/.git/**',
@@ -146,7 +156,7 @@ deck.register_start_preset({
         },
       }),
     }, {
-      view = function()
+      get_view = function()
         return require('deck.builtin.view.drawer_picker')({ auto_resize = true, min_width = option.width })
       end,
       dedup = false,
