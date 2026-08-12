@@ -9,47 +9,47 @@
       "src": "https://github.com/uga-rosa/ccc.nvim"
     },
     "denops.vim": {
-      "rev": "1df7a022d6e9cb3f6a3db43235e0f174ccd79e03",
+      "rev": "e82c5a94ca1154b05c9d74d6f6f58c9991b1424f",
       "src": "https://github.com/vim-denops/denops.vim"
     },
     "fidget.nvim": {
-      "rev": "889e2e96edef4e144965571d46f7a77bcc4d0ddf",
+      "rev": "6f793b2bcd2d35e201c09520f698bb763220908a",
       "src": "https://github.com/j-hui/fidget.nvim"
     },
     "md-render.nvim": {
-      "rev": "cd751c984198a891d9d6748800a1d3d2815e8d9d",
+      "rev": "1e55f744ae1d89d31f92e8af621f4428147db379",
       "src": "https://github.com/delphinus/md-render.nvim"
     },
     "mini.bufremove": {
-      "rev": "8603490905fdfa31943cf2ede7ef4475e3dbac9a",
+      "rev": "281bb1a2c60c3618c854bef2c0933276eb2362c2",
       "src": "https://github.com/echasnovski/mini.bufremove"
     },
     "mini.diff": {
-      "rev": "ab11575a6c147ecfba894d676d0c93e855021d34",
+      "rev": "626b8a5b93874c4d05ca25aedec56cfff0b378fb",
       "src": "https://github.com/echasnovski/mini.diff"
     },
     "mini.extra": {
-      "rev": "bc4e872500fd6d2ce252604e0ffa100f64f02280",
+      "rev": "9c6affac2b176142f48b185bd7abc5db7ec20ac8",
       "src": "https://github.com/echasnovski/mini.extra"
     },
     "mini.files": {
-      "rev": "e8db416c9f5dbce70f5501da28263d45c0a4df6b",
+      "rev": "a249438d15fa6f64085ba83a9d1794d726aaf5ad",
       "src": "https://github.com/echasnovski/mini.files"
     },
     "mini.icons": {
-      "rev": "bac6317300e205335df425296570d84322730067",
+      "rev": "98faae31e9be1cc054ae63485e58ceb185efcad0",
       "src": "https://github.com/echasnovski/mini.icons"
     },
     "mini.indentscope": {
-      "rev": "e0601f75aa5137a5a13bb92a988c9a300f5bd3de",
+      "rev": "92fbaf895f83c59575ec599df532b297ebf62b14",
       "src": "https://github.com/echasnovski/mini.indentscope"
     },
     "mini.pick": {
-      "rev": "437d44eb57312f23e6b931704694fc294922cd88",
+      "rev": "04e73ab07222508361095bb6e27621b315e6b9f1",
       "src": "https://github.com/echasnovski/mini.pick"
     },
     "nightfox.nvim": {
-      "rev": "ba47d4b4c5ec308718641ba7402c143836f35aa9",
+      "rev": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
       "src": "https://github.com/EdenEast/nightfox.nvim"
     },
     "nvim-aibo": {
@@ -57,11 +57,11 @@
       "src": "https://github.com/lambdalisue/nvim-aibo"
     },
     "nvim-cmp-kit": {
-      "rev": "b2f8930ed9d2ee7c1269202e884972a039173c0d",
+      "rev": "c8eac5a441ca56fc8ec7918c956bc6227a2229f4",
       "src": "https://github.com/hrsh7th/nvim-cmp-kit"
     },
     "nvim-deck": {
-      "rev": "d4bb2043c4b62db516f8ccee4a184295a31e00fd",
+      "rev": "479971b7b946177fd26303e04e0aa5d8334b925c",
       "src": "https://github.com/hrsh7th/nvim-deck"
     },
     "nvim-ix": {
@@ -73,11 +73,11 @@
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lspconfig": {
-      "rev": "e05fb8c3bd61d909dacff24f77f23beb644daf54",
+      "rev": "4267d26e60323a45e18f8e7a63a964cc8f53ca4e",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
+      "rev": "c9f9ed6c1892f629ea399f4ee7905f2686fa13f2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -90,7 +90,7 @@
       "src": "https://github.com/kevinhwang91/promise-async"
     },
     "skkeleton": {
-      "rev": "b530eac5a859ce2f8fa4d99fa5cd83b9d3199086",
+      "rev": "cb6e529dada798929deefd879e32e418dab1c6ac",
       "src": "https://github.com/vim-skk/skkeleton"
     },
     "term-edit.nvim": {
@@ -98,7 +98,7 @@
       "src": "https://github.com/chomosuke/term-edit.nvim"
     },
     "vim-gin": {
-      "rev": "726a2eede0f03e97507ec99ea20cba83f8eb086e",
+      "rev": "24cce091cfa32c013bc53cf4ff8f721d6690cf24",
       "src": "https://github.com/lambdalisue/vim-gin"
     },
     "vim-qfedit": {
@@ -114,7 +114,7 @@
       "src": "https://github.com/drmingdrmer/vim-toggle-quickfix"
     },
     "vimdoc-ja": {
-      "rev": "ee16ecb8f802287302ff0317e52e27c274c16194",
+      "rev": "87d867e6bacddd1c72334042646c84735124d9ae",
       "src": "https://github.com/vim-jp/vimdoc-ja"
     }
   }
