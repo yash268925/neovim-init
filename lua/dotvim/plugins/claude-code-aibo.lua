@@ -25,7 +25,20 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.wo.winfixwidth = true
 
     local bufnr = ev.buf
-    if not vim.api.nvim_buf_get_name(bufnr):match('^aiboprompt://') then
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+
+    if bufname:match('^aiboconsole://') then
+      -- Claude Code の TUI 自身にスクロールさせたいが、コンソール側の
+      -- ftplugin は <PageUp>/<PageDown> を割り当てないため、<C-g>i の
+      -- Direct Mode に入らないと端末へ届かない。codex 用 ftplugin と同じ
+      -- <Plug>(aibo-send) 転送をここで補う。
+      local opts = { buffer = bufnr, nowait = true, silent = true }
+      vim.keymap.set({ 'n', 'i' }, '<PageUp>', '<Plug>(aibo-send)<PageUp>', opts)
+      vim.keymap.set({ 'n', 'i' }, '<PageDown>', '<Plug>(aibo-send)<PageDown>', opts)
+      return
+    end
+
+    if not bufname:match('^aiboprompt://') then
       return
     end
 
