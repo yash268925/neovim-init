@@ -16,6 +16,142 @@ aibo.setup({
   },
 })
 
+local function warn(msg)
+  vim.notify('[claude-scratchpad] ' .. msg, vim.log.levels.WARN)
+end
+
+-- Claude Code の内部仕様 (sessions/<pid>.json と scratchpad の配置) に依存して
+-- いるため、claude 本体の更新で壊れうる。sessionId は /clear で変わるので
+-- キャッシュせず、呼ぶたびに解決する。
+local function resolve_scratchpad(bufnr)
+  local job_id = vim.b[bufnr].terminal_job_id
+  if not job_id then
+    return nil, 'terminal job not found'
+  end
+  local ok, pid = pcall(vim.fn.jobpid, job_id)
+  if not ok then
+    return nil, 'claude process has exited'
+  end
+
+  local config_dir = vim.env.CLAUDE_CONFIG_DIR or vim.fs.joinpath(vim.env.HOME, '.claude')
+  local session_file = vim.fs.joinpath(config_dir, 'sessions', pid .. '.json')
+  local read_ok, lines = pcall(vim.fn.readfile, session_file)
+  if not read_ok then
+    return nil, 'session file not found: ' .. session_file
+  end
+  local decode_ok, session = pcall(vim.json.decode, table.concat(lines, '\n'))
+  if not decode_ok or type(session) ~= 'table' or type(session.sessionId) ~= 'string' then
+    return nil, 'sessionId not found in ' .. session_file
+  end
+
+  -- 中間のディレクトリは cwd をエンコードした名前だが、エンコード規則を
+  -- 再現せず sessionId だけで探す。
+  local tmpdir = vim.env.CLAUDE_CODE_TMPDIR or '/tmp'
+  local pattern = vim.fs.joinpath(tmpdir, 'claude-' .. vim.uv.getuid(), '*', session.sessionId, 'scratchpad')
+  local dirs = vim.tbl_filter(function(dir)
+    return vim.fn.isdirectory(dir) == 1
+  end, vim.fn.glob(pattern, false, true))
+  if #dirs == 0 then
+    return nil, 'scratchpad not found for session ' .. session.sessionId
+  end
+  return dirs[1]
+end
+
+local function is_edit_target(win)
+  if vim.api.nvim_win_get_config(win).relative ~= '' then
+    return false
+  end
+  local buf = vim.api.nvim_win_get_buf(win)
+  if vim.bo[buf].buftype ~= '' then
+    return false
+  end
+  local ft = vim.bo[buf].filetype
+  return ft ~= 'deck' and not ft:match('^aibo%-')
+end
+
+-- 組み込みの open は deck の WinEnter 履歴から開き先を選ぶため、履歴に通常
+-- ウィンドウが無いとコンソール自身で開いてしまう。ピッカー起動時のコンソールを
+-- 基準に、同じタブの通常ウィンドウを選び直す。
+local function find_edit_window(origin_win, alt_win)
+  if alt_win and vim.api.nvim_win_is_valid(alt_win) and is_edit_target(alt_win) then
+    return alt_win
+  end
+  local tab = vim.api.nvim_win_get_tabpage(origin_win)
+  return vim.iter(vim.api.nvim_tabpage_list_wins(tab)):find(is_edit_target)
+end
+
+local function open_in_edit_window(origin_win, alt_win, filename)
+  local win = find_edit_window(origin_win, alt_win)
+  if win then
+    vim.api.nvim_set_current_win(win)
+  else
+    vim.api.nvim_set_current_win(origin_win)
+    vim.cmd('topleft vnew')
+    -- 新しいウィンドウはコンソールの winfixwidth を引き継ぐため、外さないと
+    -- 以降の分割でこちらの幅も固定されてしまう。
+    vim.wo.winfixwidth = false
+  end
+  local target = vim.fn.bufnr(filename)
+  if target ~= -1 then
+    vim.cmd.buffer(target)
+  else
+    vim.cmd.edit(vim.fn.fnameescape(filename))
+  end
+end
+
+local function open_scratchpad_picker(bufnr)
+  local root, err = resolve_scratchpad(bufnr)
+  if not root then
+    warn(err)
+    return
+  end
+
+  local origin_win = vim.api.nvim_get_current_win()
+  local alt_nr = vim.fn.winnr('#')
+  local alt_win = alt_nr > 0 and vim.fn.win_getid(alt_nr) or nil
+
+  local deck = require('deck')
+  deck.start({
+    name = 'claude-scratchpad',
+    execute = function(ctx)
+      local files = {}
+      for name, ftype in vim.fs.dir(root, { depth = 10 }) do
+        if ftype == 'file' then
+          local filename = vim.fs.joinpath(root, name)
+          local stat = vim.uv.fs_stat(filename)
+          table.insert(files, { name = name, filename = filename, mtime = stat and stat.mtime.sec or 0 })
+        end
+      end
+      table.sort(files, function(a, b)
+        return a.mtime > b.mtime
+      end)
+      for _, file in ipairs(files) do
+        ctx.item({
+          display_text = {
+            { file.name .. ' ' },
+            { os.date('%Y-%m-%d %H:%M', file.mtime), 'Comment' },
+          },
+          data = { filename = file.filename },
+        })
+      end
+      ctx.done()
+    end,
+    actions = {
+      {
+        name = 'default',
+        resolve = function(ctx)
+          return #ctx.get_action_items() > 0
+        end,
+        execute = function(ctx)
+          local items = ctx.get_action_items()
+          ctx.hide()
+          open_in_edit_window(origin_win, alt_win, items[#items].data.filename)
+        end,
+      },
+    },
+  })
+end
+
 -- Runs after nvim-aibo's own ftplugin/aibo-*.lua (built-in ftplugin loading
 -- is wired up before user config, so a later `FileType` autocmd for the same
 -- pattern always fires after it -- the standard ftplugin-overrule idiom).
@@ -35,6 +171,12 @@ vim.api.nvim_create_autocmd('FileType', {
       local opts = { buffer = bufnr, nowait = true, silent = true }
       vim.keymap.set({ 'n', 'i' }, '<PageUp>', '<Plug>(aibo-send)<PageUp>', opts)
       vim.keymap.set({ 'n', 'i' }, '<PageDown>', '<Plug>(aibo-send)<PageDown>', opts)
+
+      if bufname:match('^aiboconsole://claude/') then
+        vim.keymap.set('n', ';s', function()
+          open_scratchpad_picker(bufnr)
+        end, { buffer = bufnr, silent = true, desc = 'Claude scratchpad files' })
+      end
       return
     end
 
