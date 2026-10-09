@@ -16,6 +16,21 @@ aibo.setup({
   },
 })
 
+-- <Plug>(aibo-send)<Key> 形式のマッピングでも、送るキーが既に typeahead に
+-- 積まれているのに毎回 "Oneshot (press any key):" を echo してしまう。
+-- プラグインに抑止の設定がないため、キー待ちが不要なときだけ prompt を外す。
+do
+  local keycode = require('aibo.internal.keycode')
+  local get_single_keycode = keycode.get_single_keycode
+  keycode.get_single_keycode = function(options)
+    if options and options.prompt and vim.fn.getchar(1) ~= 0 then
+      options = vim.deepcopy(options)
+      options.prompt = nil
+    end
+    return get_single_keycode(options)
+  end
+end
+
 local function warn(msg)
   vim.notify('[claude-scratchpad] ' .. msg, vim.log.levels.WARN)
 end
