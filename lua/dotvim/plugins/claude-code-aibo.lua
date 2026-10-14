@@ -31,14 +31,14 @@ do
   end
 end
 
-local function warn(msg)
-  vim.notify('[claude-scratchpad] ' .. msg, vim.log.levels.WARN)
+local function warn(name, msg)
+  vim.notify('[' .. name .. '] ' .. msg, vim.log.levels.WARN)
 end
 
--- Claude Code の内部仕様 (sessions/<pid>.json と scratchpad の配置) に依存して
--- いるため、claude 本体の更新で壊れうる。sessionId は /clear で変わるので
--- キャッシュせず、呼ぶたびに解決する。
-local function resolve_scratchpad(bufnr)
+-- Claude Code の内部仕様 (sessions/<pid>.json、scratchpad や memory の配置) に
+-- 依存しているため、claude 本体の更新で壊れうる。sessionId は /clear で変わる
+-- のでキャッシュせず、呼ぶたびに解決する。
+local function resolve_session_id(bufnr)
   local job_id = vim.b[bufnr].terminal_job_id
   if not job_id then
     return nil, 'terminal job not found'
@@ -58,16 +58,41 @@ local function resolve_scratchpad(bufnr)
   if not decode_ok or type(session) ~= 'table' or type(session.sessionId) ~= 'string' then
     return nil, 'sessionId not found in ' .. session_file
   end
+  return session.sessionId, config_dir
+end
 
-  -- 中間のディレクトリは cwd をエンコードした名前だが、エンコード規則を
-  -- 再現せず sessionId だけで探す。
+-- 以下の glob の中間ディレクトリは cwd をエンコードした名前だが、エンコード
+-- 規則を再現せず sessionId だけで探す。
+local function resolve_scratchpad(bufnr)
+  local session_id, err = resolve_session_id(bufnr)
+  if not session_id then
+    return nil, err
+  end
   local tmpdir = vim.env.CLAUDE_CODE_TMPDIR or '/tmp'
-  local pattern = vim.fs.joinpath(tmpdir, 'claude-' .. vim.uv.getuid(), '*', session.sessionId, 'scratchpad')
+  local pattern = vim.fs.joinpath(tmpdir, 'claude-' .. vim.uv.getuid(), '*', session_id, 'scratchpad')
   local dirs = vim.tbl_filter(function(dir)
     return vim.fn.isdirectory(dir) == 1
   end, vim.fn.glob(pattern, false, true))
   if #dirs == 0 then
-    return nil, 'scratchpad not found for session ' .. session.sessionId
+    return nil, 'scratchpad not found for session ' .. session_id
+  end
+  return dirs[1]
+end
+
+local function resolve_memory(bufnr)
+  local session_id, config_dir_or_err = resolve_session_id(bufnr)
+  if not session_id then
+    return nil, config_dir_or_err
+  end
+  local config_dir = config_dir_or_err
+  local pattern = vim.fs.joinpath(config_dir, 'projects', '*', session_id .. '.jsonl')
+  local dirs = vim.tbl_filter(function(dir)
+    return vim.fn.isdirectory(dir) == 1
+  end, vim.tbl_map(function(transcript)
+    return vim.fs.joinpath(vim.fs.dirname(transcript), 'memory')
+  end, vim.fn.glob(pattern, false, true)))
+  if #dirs == 0 then
+    return nil, 'memory directory not found for session ' .. session_id
   end
   return dirs[1]
 end
@@ -114,27 +139,21 @@ local function open_in_edit_window(origin_win, alt_win, filename)
   end
 end
 
-local function open_scratchpad_picker(bufnr)
-  local root, err = resolve_scratchpad(bufnr)
-  if not root then
-    warn(err)
-    return
-  end
-
+local function open_file_picker(name, root)
   local origin_win = vim.api.nvim_get_current_win()
   local alt_nr = vim.fn.winnr('#')
   local alt_win = alt_nr > 0 and vim.fn.win_getid(alt_nr) or nil
 
   local deck = require('deck')
   deck.start({
-    name = 'claude-scratchpad',
+    name = name,
     execute = function(ctx)
       local files = {}
-      for name, ftype in vim.fs.dir(root, { depth = 10 }) do
+      for relpath, ftype in vim.fs.dir(root, { depth = 10 }) do
         if ftype == 'file' then
-          local filename = vim.fs.joinpath(root, name)
+          local filename = vim.fs.joinpath(root, relpath)
           local stat = vim.uv.fs_stat(filename)
-          table.insert(files, { name = name, filename = filename, mtime = stat and stat.mtime.sec or 0 })
+          table.insert(files, { name = relpath, filename = filename, mtime = stat and stat.mtime.sec or 0 })
         end
       end
       table.sort(files, function(a, b)
@@ -167,6 +186,24 @@ local function open_scratchpad_picker(bufnr)
   })
 end
 
+local function open_scratchpad_picker(bufnr)
+  local root, err = resolve_scratchpad(bufnr)
+  if not root then
+    warn('claude-scratchpad', err)
+    return
+  end
+  open_file_picker('claude-scratchpad', root)
+end
+
+local function open_memory_picker(bufnr)
+  local root, err = resolve_memory(bufnr)
+  if not root then
+    warn('claude-memory', err)
+    return
+  end
+  open_file_picker('claude-memory', root)
+end
+
 -- Runs after nvim-aibo's own ftplugin/aibo-*.lua (built-in ftplugin loading
 -- is wired up before user config, so a later `FileType` autocmd for the same
 -- pattern always fires after it -- the standard ftplugin-overrule idiom).
@@ -191,6 +228,9 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.keymap.set('n', ';s', function()
           open_scratchpad_picker(bufnr)
         end, { buffer = bufnr, silent = true, desc = 'Claude scratchpad files' })
+        vim.keymap.set('n', ';m', function()
+          open_memory_picker(bufnr)
+        end, { buffer = bufnr, silent = true, desc = 'Claude memory files' })
       end
       return
     end
