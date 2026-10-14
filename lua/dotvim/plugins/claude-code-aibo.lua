@@ -58,7 +58,7 @@ local function resolve_session_id(bufnr)
   if not decode_ok or type(session) ~= 'table' or type(session.sessionId) ~= 'string' then
     return nil, 'sessionId not found in ' .. session_file
   end
-  return session.sessionId, config_dir
+  return session.sessionId, config_dir, session.cwd
 end
 
 -- 以下の glob の中間ディレクトリは cwd をエンコードした名前だが、エンコード
@@ -79,22 +79,33 @@ local function resolve_scratchpad(bufnr)
   return dirs[1]
 end
 
+-- 会話履歴の projects/*/<sessionId>.jsonl は最初のメッセージ送信まで作られない
+-- ため、起動直後でも引けるよう cwd からディレクトリ名を組み立てる。worktree でも
+-- 本体リポジトリと同じメモリを共有するので、--git-common-dir の親を基準にする。
+local function memory_dir_for(config_dir, cwd)
+  local root = cwd
+  local result = vim
+    .system({ 'git', '-C', cwd, 'rev-parse', '--path-format=absolute', '--git-common-dir' }, { text = true })
+    :wait()
+  if result.code == 0 then
+    root = vim.fs.dirname(vim.trim(result.stdout))
+  end
+  return vim.fs.joinpath(config_dir, 'projects', (root:gsub('[^%w]', '-')), 'memory')
+end
+
 local function resolve_memory(bufnr)
-  local session_id, config_dir_or_err = resolve_session_id(bufnr)
+  local session_id, config_dir_or_err, cwd = resolve_session_id(bufnr)
   if not session_id then
     return nil, config_dir_or_err
   end
-  local config_dir = config_dir_or_err
-  local pattern = vim.fs.joinpath(config_dir, 'projects', '*', session_id .. '.jsonl')
-  local dirs = vim.tbl_filter(function(dir)
-    return vim.fn.isdirectory(dir) == 1
-  end, vim.tbl_map(function(transcript)
-    return vim.fs.joinpath(vim.fs.dirname(transcript), 'memory')
-  end, vim.fn.glob(pattern, false, true)))
-  if #dirs == 0 then
-    return nil, 'memory directory not found for session ' .. session_id
+  if type(cwd) ~= 'string' then
+    return nil, 'cwd not found in session file for session ' .. session_id
   end
-  return dirs[1]
+  local dir = memory_dir_for(config_dir_or_err, cwd)
+  if vim.fn.isdirectory(dir) == 0 then
+    return nil, 'memory directory not found: ' .. dir
+  end
+  return dir
 end
 
 local function is_edit_target(win)
