@@ -9,43 +9,43 @@
       "src": "https://github.com/uga-rosa/ccc.nvim"
     },
     "denops.vim": {
-      "rev": "e82c5a94ca1154b05c9d74d6f6f58c9991b1424f",
+      "rev": "56df0b8a980170dec728033f2f7dd1311bab294c",
       "src": "https://github.com/vim-denops/denops.vim"
     },
     "fidget.nvim": {
-      "rev": "6f793b2bcd2d35e201c09520f698bb763220908a",
+      "rev": "9e0201673e08e997e7cf52afca5565c70bd117f3",
       "src": "https://github.com/j-hui/fidget.nvim"
     },
     "md-render.nvim": {
-      "rev": "1e55f744ae1d89d31f92e8af621f4428147db379",
+      "rev": "39c731abe5bf4cfa69c754968a7228299dcbdc69",
       "src": "https://github.com/delphinus/md-render.nvim"
     },
     "mini.bufremove": {
-      "rev": "281bb1a2c60c3618c854bef2c0933276eb2362c2",
+      "rev": "6e9c563cb71a8e4d57c4fb4089eb90a3bf3e8851",
       "src": "https://github.com/echasnovski/mini.bufremove"
     },
     "mini.diff": {
-      "rev": "626b8a5b93874c4d05ca25aedec56cfff0b378fb",
+      "rev": "47ab8cf21c62cfd952008f2b9e79417c98173ec1",
       "src": "https://github.com/echasnovski/mini.diff"
     },
     "mini.extra": {
-      "rev": "9c6affac2b176142f48b185bd7abc5db7ec20ac8",
+      "rev": "6cbc59d875a9768819091d0a56223205022cbe72",
       "src": "https://github.com/echasnovski/mini.extra"
     },
     "mini.files": {
-      "rev": "a249438d15fa6f64085ba83a9d1794d726aaf5ad",
+      "rev": "638b80cb985c89ca2a98eed72c552c8d485a3d5b",
       "src": "https://github.com/echasnovski/mini.files"
     },
     "mini.icons": {
-      "rev": "98faae31e9be1cc054ae63485e58ceb185efcad0",
+      "rev": "9e4c1645ce2b78afd6191b6be2c38bc0f998dd48",
       "src": "https://github.com/echasnovski/mini.icons"
     },
     "mini.indentscope": {
-      "rev": "92fbaf895f83c59575ec599df532b297ebf62b14",
+      "rev": "f75e6e4d560641cbb42e97182819af0175bdfe0e",
       "src": "https://github.com/echasnovski/mini.indentscope"
     },
     "mini.pick": {
-      "rev": "04e73ab07222508361095bb6e27621b315e6b9f1",
+      "rev": "9368112b7cafb61d837bed55fc6f40e55df53fa0",
       "src": "https://github.com/echasnovski/mini.pick"
     },
     "nightfox.nvim": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/hrsh7th/nvim-cmp-kit"
     },
     "nvim-deck": {
-      "rev": "479971b7b946177fd26303e04e0aa5d8334b925c",
+      "rev": "49a62f7bf60830b30ba7d98923878f3e617fd8da",
       "src": "https://github.com/hrsh7th/nvim-deck"
     },
     "nvim-ix": {
@@ -73,11 +73,11 @@
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lspconfig": {
-      "rev": "4267d26e60323a45e18f8e7a63a964cc8f53ca4e",
+      "rev": "77b7432d4770d23b277d37923e5a08a442d8bb07",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "c9f9ed6c1892f629ea399f4ee7905f2686fa13f2",
+      "rev": "29212d826054bb2948fa9d3a99eca9bf6a050eb2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -90,7 +90,7 @@
       "src": "https://github.com/kevinhwang91/promise-async"
     },
     "skkeleton": {
-      "rev": "cb6e529dada798929deefd879e32e418dab1c6ac",
+      "rev": "e22d59fea70e46cf27f516c7a31ef4f52e6e8b06",
       "src": "https://github.com/vim-skk/skkeleton"
     },
     "term-edit.nvim": {
@@ -114,7 +114,7 @@
       "src": "https://github.com/drmingdrmer/vim-toggle-quickfix"
     },
     "vimdoc-ja": {
-      "rev": "87d867e6bacddd1c72334042646c84735124d9ae",
+      "rev": "ea64b98cd7ad66e77ab3aa0df99651d7b2a019b5",
       "src": "https://github.com/vim-jp/vimdoc-ja"
     }
   }
