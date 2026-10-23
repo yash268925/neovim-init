@@ -93,6 +93,11 @@
       "rev": "e22d59fea70e46cf27f516c7a31ef4f52e6e8b06",
       "src": "https://github.com/vim-skk/skkeleton"
     },
+    "skkelua.nvim": {
+      "rev": "b7f069f48df0a5d5df9bca4f696fdaec7c1131bb",
+      "src": "https://github.com/kjuq/skkelua.nvim",
+      "version": "'master'"
+    },
     "term-edit.nvim": {
       "rev": "29c4584c2cef44a3fdcc55860957d081b892a569",
       "src": "https://github.com/chomosuke/term-edit.nvim"
