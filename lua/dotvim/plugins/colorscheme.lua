@@ -13,7 +13,7 @@ require('nightfox').setup({
 })
 
 vim.o.termguicolors = true
-vim.o.winblend = 4
+vim.o.winblend = 0
 
 vim.cmd.colorscheme('nordfox')
 
