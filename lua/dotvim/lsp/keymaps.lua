@@ -1,25 +1,7 @@
-vim.pack.add({
-  { src = 'https://github.com/neovim/nvim-lspconfig' },
-  'https://github.com/mfussenegger/nvim-jdtls',
-})
-
-vim.lsp.enable({
-  'lua_ls',
-  'ts_ls',
-  'eslint',
-  'cssls',
-  'html',
-  'jsonls',
-  'tombi',
-  'oxfmt',
-  'oxlint',
-  'dartls',
-  'phpactor',
-})
-
 local keymaps = require('dotvim._lib.utils').keymaps
 
 vim.api.nvim_create_autocmd('LspAttach', {
+  group = 'dotvim.lsp',
   callback = function(args)
     local buf = args.buf
 

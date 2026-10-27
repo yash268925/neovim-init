@@ -1,10 +1,8 @@
 require('dotvim.plugins.mini')
 
-require('dotvim.plugins.lsp')
 require('dotvim.plugins.ripgrep')
 require('dotvim.plugins.toggle-quickfix')
 require('dotvim.plugins.ja-doc')
-require('dotvim.plugins.treesitter')
 require('dotvim.plugins.completion')
 require('dotvim.plugins.term-edit')
 require('dotvim.plugins.color-picker')
