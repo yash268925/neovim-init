@@ -1,6 +1,5 @@
 require('dotvim.plugins.mini')
 
-require('dotvim.plugins.deck-picker')
 require('dotvim.plugins.lsp')
 require('dotvim.plugins.ripgrep')
 require('dotvim.plugins.toggle-quickfix')

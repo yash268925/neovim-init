@@ -1,5 +1,3 @@
-vim.pack.add({ 'https://github.com/hrsh7th/nvim-deck' })
-
 local deck = require('deck')
 local kit = require('deck.kit')
 
@@ -212,6 +210,7 @@ deck.register_start_preset({
 
 
 vim.api.nvim_create_autocmd('User', {
+  group = 'dotvim.picker',
   pattern = 'DeckStart',
   callback = function(e)
     local ctx = e.data.ctx --[[@as deck.Context]]
@@ -232,6 +231,7 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 vim.api.nvim_create_autocmd('User', {
+  group = 'dotvim.picker',
   pattern = 'DeckStart:deck.actions',
   callback = function(e)
     local ctx = e.data.ctx --[[@as deck.Context]]
@@ -252,6 +252,7 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 vim.api.nvim_create_autocmd('User', {
+  group = 'dotvim.picker',
   pattern = 'DeckStart:buffers',
   callback = function(e)
     local ctx = e.data.ctx --[[@as deck.Context]]
@@ -264,6 +265,7 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 vim.api.nvim_create_autocmd('User', {
+  group = 'dotvim.picker',
   pattern = 'DeckStart:files',
   callback = function(e)
     local ctx = e.data.ctx --[[@as deck.Context]]
@@ -273,6 +275,7 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 vim.api.nvim_create_autocmd('User', {
+  group = 'dotvim.picker',
   pattern = 'DeckStart:explorer',
   callback = function(e)
     local ctx = e.data.ctx --[[@as deck.Context]]
