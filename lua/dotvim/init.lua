@@ -5,6 +5,7 @@ require('dotvim.lsp').setup()
 require('dotvim.completion').setup()
 require('dotvim.quickfix').setup()
 require('dotvim.skk').setup()
+require('dotvim.git').setup()
 require('dotvim.aibo').setup()
 
 require('dotvim.plugins')
