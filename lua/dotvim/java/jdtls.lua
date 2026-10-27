@@ -14,8 +14,8 @@
 --
 -- 未設定なら既定値(=従来のハードコード値)で動くため、.nvim.lua を置かない
 -- プロジェクトの挙動は不変。
--- variant を変えた場合は java/android-libs.init.gradle も同じ -Pjdtls.variant=<variant>
--- でキャッシュを再生成すること(R.jar/buildConfig が同一バリアントを指す必要がある)。
+-- variant を変えた場合は :JdtlsAndroidLibs でキャッシュを再生成すること
+-- (R.jar/buildConfig が同一バリアントを指す必要がある)。
 
 local M = {}
 
@@ -56,10 +56,9 @@ end
 -- 生成し、Gradle/Mavenインポートを無効化してEclipseProjectImporterに読ませる方式。
 -- Buildshipを通らないので同期による上書きも起きない。
 --
--- 依存JARの一覧は ~/.cache/nvim/jdtls-libs/<project>-<module>.txt に事前生成しておく
--- (生成方法は lua/dotvim/java/android-libs.init.gradle のコメントを参照)。
--- build.gradleの依存が変わったらこのキャッシュを再生成すれば、次回起動時に
--- .classpathも作り直される。
+-- 依存JARの一覧は ~/.cache/nvim/jdtls-libs/<project>-<module>.txt に
+-- :JdtlsAndroidLibs で事前生成しておく。build.gradleの依存が変わったら
+-- 再実行すれば、.classpathの再生成とjdtlsの再起動まで行われる。
 function M.find_android_module_dir(file_path, base)
   local dir = vim.fn.fnamemodify(file_path, ':h')
   while #dir > #base do
@@ -176,24 +175,40 @@ function M.write_eclipse_project(android_module_dir, project_name, module_name, 
   end
 end
 
----@param bufnr integer
-function M.start(bufnr)
-  local jdtls = require('jdtls')
-
-  local bufname = vim.api.nvim_buf_get_name(bufnr)
-
+---@param path string
+---@return string?
+function M.find_root(path)
   local root_dir = require('jdtls.setup').find_root({
     '.git',
     'gradlew',
     'mvnw',
     'settings.gradle',
     'settings.gradle.kts',
-  }, bufname)
+  }, path)
   if not root_dir or root_dir == '' then
+    return nil
+  end
+  return root_dir
+end
+
+---@param root_dir string
+---@return string
+function M.project_name(root_dir)
+  return vim.fn.fnamemodify(root_dir, ':p:h:t')
+end
+
+---@param bufnr integer
+function M.start(bufnr)
+  local jdtls = require('jdtls')
+
+  local bufname = vim.api.nvim_buf_get_name(bufnr)
+
+  local root_dir = M.find_root(bufname)
+  if not root_dir then
     return
   end
 
-  local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
+  local project_name = M.project_name(root_dir)
 
   local android_module_dir = M.find_android_module_dir(bufname, root_dir)
 
@@ -234,7 +249,8 @@ function M.start(bufnr)
     end
 
     vim.notify(
-      'jdtls: Androidモジュール(' .. module_name .. ')用の依存関係キャッシュが見つかりません: ' .. libs_cache,
+      'jdtls: Androidモジュール(' .. module_name .. ')用の依存関係キャッシュが見つかりません: ' .. libs_cache
+        .. ' (:JdtlsAndroidLibs で生成できます)',
       vim.log.levels.WARN
     )
   end

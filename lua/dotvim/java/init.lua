@@ -16,5 +16,16 @@ return require('dotvim._lib.feature').define({
         require('dotvim.java.jdtls').start(ev.buf)
       end,
     })
+
+    -- build.gradle などの編集中にも使えるよう、java バッファに限定しない。
+    vim.api.nvim_create_user_command('JdtlsAndroidLibs', function(opts)
+      require('dotvim.java.android-libs').command(opts.fargs)
+    end, {
+      nargs = '*',
+      complete = function(arglead)
+        return require('dotvim.java.android-libs').complete(arglead)
+      end,
+      desc = 'Android モジュールの依存一覧を生成して jdtls を作り直す',
+    })
   end,
 })

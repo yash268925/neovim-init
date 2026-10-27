@@ -1,23 +1,15 @@
 // jdtls用: AndroidモジュールのコンパイルクラスパスをJARパスの一覧として書き出す。
 // lua/dotvim/java/jdtls.lua がこの一覧から .classpath を生成する。
 //
-// 使い方(プロジェクトルートで。<dotvim> はこのリポジトリの場所):
-//   ./gradlew -I <dotvim>/lua/dotvim/java/android-libs.init.gradle :app:jdtlsLibs
+// 通常は nvim の :JdtlsAndroidLibs [module ...] から実行する。このファイルの場所や
+// 以下のプロパティを意識する必要はない。build.gradle の依存を変えたら再実行する。
+// variant は .nvim.lua の vim.g.dotvim_jdtls.android から、R.jar の事前生成
+// (process<Variant>Resources)、.classpath の再生成、jdtls の再起動もまとめて行う。
 //
-// バリアント(build type / flavor)は -Pjdtls.variant で指定する(既定 debug)。
-// product flavor があるプロジェクトでは flavor+buildType を camelCase で渡す:
-//   ./gradlew -I <dotvim>/lua/dotvim/java/android-libs.init.gradle -Pjdtls.variant=demoDebug :app:jdtlsLibs
-// この値は .nvim.lua の vim.g.dotvim_jdtls.android.variant と一致させること
-// (R.jar/buildConfig が同一バリアントを指す必要がある)。
-//
-// 出力先: ~/.cache/nvim/jdtls-libs/<ルートディレクトリ名>-<モジュール名>.txt
-//
-// build.gradleの依存を変えたらこれを再実行する。次回nvimでjavaファイルを開いたときに
-// .classpath が自動再生成される(jdtlsが既に起動中なら再起動が必要)。
-//
-// 注意: R.jar は aapt のリソース処理で生成されるため、一度もビルドしていない場合は
-//   ./gradlew :app:process<Variant>Resources   (例 processDebugResources)
-// を先に実行しておくこと。
+// プロパティ:
+//   -Pjdtls.variant    対象バリアント(flavor+buildType の camelCase。既定 debug)
+//   -Pjdtls.outPrefix  出力先のパス接頭辞。<outPrefix><モジュール名>.txt に書く。
+//                      省略時は ~/.cache/nvim/jdtls-libs/<ルートディレクトリ名>-<モジュール名>.txt
 
 gradle.projectsEvaluated {
     gradle.rootProject.allprojects { p ->
@@ -70,8 +62,11 @@ gradle.projectsEvaluated {
                         .files.files.sort()
                 jars.each { lines << it.absolutePath }
 
-                def out = new File(System.getProperty('user.home'),
-                        ".cache/nvim/jdtls-libs/${p.rootProject.projectDir.name}-${p.name}.txt")
+                def outPrefix = p.findProperty('jdtls.outPrefix')
+                def out = outPrefix
+                        ? new File("${outPrefix}${p.name}.txt".toString())
+                        : new File(System.getProperty('user.home'),
+                                ".cache/nvim/jdtls-libs/${p.rootProject.projectDir.name}-${p.name}.txt")
                 out.parentFile.mkdirs()
                 out.text = lines.join('\n') + '\n'
                 println "jdtlsLibs: ${lines.size()} entries -> ${out}"
