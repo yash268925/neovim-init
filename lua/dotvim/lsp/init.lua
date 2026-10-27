@@ -18,12 +18,15 @@ return require('dotvim._lib.feature').define({
       'dartls',
       'phpactor',
     },
+    treesitter = {
+      indent = false,
+    },
   },
   setup = function(opts)
     vim.api.nvim_create_augroup('dotvim.lsp', { clear = true })
 
     vim.lsp.enable(opts.servers)
     require('dotvim.lsp.keymaps')
-    require('dotvim.lsp.treesitter')
+    require('dotvim.lsp.treesitter')(opts.treesitter)
   end,
 })

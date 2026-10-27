@@ -66,7 +66,7 @@ require('dotvim').setup({ ... })
 | `base` | オプション、キーマップ、autocmd、ユーザーコマンド、nohlsearch / undotree、ui2 | `shell = 'fish'`, `ui2 = true` |
 | `ui` | colorscheme (nordfox)、statusline、fidget、mini.indentscope、nvim-ufo | なし |
 | `picker` | nvim-deck | なし |
-| `lsp` | nvim-lspconfig と `vim.lsp.enable`、LspAttach のキーマップ、nvim-treesitter | `servers` (有効にするサーバー名の一覧) |
+| `lsp` | nvim-lspconfig と `vim.lsp.enable`、LspAttach のキーマップ、nvim-treesitter (パーサのインストールとハイライト) | `servers` (有効にするサーバー名の一覧)、`treesitter = { indent = false }` (treesitter による indentexpr) |
 | `completion` | nvim-cmp-kit / nvim-ix | なし |
 | `quickfix` | vim-ripgrep (`:Grep`)、vim-toggle-quickfix、vim-qfedit | なし |
 | `skk` | skkelua.nvim | `config` (skkelua に渡す表。既定値に deep merge し、辞書のリストは差し替え) |
