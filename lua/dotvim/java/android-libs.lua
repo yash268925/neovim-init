@@ -205,8 +205,20 @@ local function run(root_dir, module_dirs)
           )
           return
         end
-        local summary = output:match('jdtlsLibs: [^\n]*') or 'jdtlsLibs: 完了'
-        vim.notify('JdtlsAndroidLibs: ' .. summary, vim.log.levels.INFO)
+        local summary
+        local warnings = {}
+        for line in vim.gsplit(output, '\n') do
+          local msg = line:match('jdtlsLibs: .*')
+          if msg and msg:match('^jdtlsLibs: %d+ entries') then
+            summary = summary or msg
+          elseif msg then
+            table.insert(warnings, msg)
+          end
+        end
+        if #warnings > 0 then
+          vim.notify('JdtlsAndroidLibs:\n' .. table.concat(warnings, '\n'), vim.log.levels.WARN)
+        end
+        vim.notify('JdtlsAndroidLibs: ' .. (summary or 'jdtlsLibs: 完了'), vim.log.levels.INFO)
         refresh(root_dir, module_dir)
         step(i + 1)
       end)
