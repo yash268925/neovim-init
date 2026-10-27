@@ -2,8 +2,6 @@ return require('dotvim._lib.feature').define({
   name = 'lsp',
   specs = {
     { src = 'https://github.com/neovim/nvim-lspconfig' },
-    -- ftplugin/java.lua が require('jdtls') するため、java 機能へ移すまではここで入れる
-    'https://github.com/mfussenegger/nvim-jdtls',
     { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'main' },
   },
   defaults = {

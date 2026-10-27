@@ -1,12 +1,12 @@
 // jdtls用: AndroidモジュールのコンパイルクラスパスをJARパスの一覧として書き出す。
-// ftplugin/java.lua がこの一覧から .classpath を生成する。
+// lua/dotvim/java/jdtls.lua がこの一覧から .classpath を生成する。
 //
-// 使い方(プロジェクトルートで):
-//   ./gradlew -I ~/.config/nvim/jdtls/android-libs.init.gradle :app:jdtlsLibs
+// 使い方(プロジェクトルートで。<dotvim> はこのリポジトリの場所):
+//   ./gradlew -I <dotvim>/lua/dotvim/java/android-libs.init.gradle :app:jdtlsLibs
 //
 // バリアント(build type / flavor)は -Pjdtls.variant で指定する(既定 debug)。
 // product flavor があるプロジェクトでは flavor+buildType を camelCase で渡す:
-//   ./gradlew -I ~/.config/nvim/jdtls/android-libs.init.gradle -Pjdtls.variant=demoDebug :app:jdtlsLibs
+//   ./gradlew -I <dotvim>/lua/dotvim/java/android-libs.init.gradle -Pjdtls.variant=demoDebug :app:jdtlsLibs
 // この値は .nvim.lua の vim.g.dotvim_jdtls.android.variant と一致させること
 // (R.jar/buildConfig が同一バリアントを指す必要がある)。
 //
