@@ -6,9 +6,7 @@ vim.pack.add({
   { src = 'https://github.com/echasnovski/mini.diff' },
 })
 
-local lib_mini = require('dotvim._lib.mini')
-local icons = lib_mini.icons()
-local bufremove = lib_mini.bufremove()
+local icons = require('dotvim._lib.mini').icons()
 
 local files = require('mini.files')
 files.setup({
@@ -77,7 +75,6 @@ diff.setup({
 
 return {
   icons = icons,
-  bufremove = bufremove,
   pick = pick,
   extra = extra,
 }

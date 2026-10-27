@@ -21,5 +21,3 @@ require('dotvim.plugins.skkelua')
 require('dotvim.plugins.gin')
 
 require('dotvim.plugins.md-render')
-
-vim.cmd.packadd('nvim.undotree')
