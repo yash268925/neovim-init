@@ -4,6 +4,7 @@ require('dotvim.picker').setup()
 require('dotvim.lsp').setup()
 require('dotvim.completion').setup()
 require('dotvim.quickfix').setup()
+require('dotvim.skk').setup()
 require('dotvim.aibo').setup()
 
 require('dotvim.plugins')
