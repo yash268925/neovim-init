@@ -4,15 +4,13 @@ return require('dotvim._lib.feature').define({
   name = 'picker',
   specs = {
     specs.mini_icons,
-    { src = 'https://github.com/echasnovski/mini.files' },
-    { src = 'https://github.com/echasnovski/mini.pick' },
-    { src = 'https://github.com/echasnovski/mini.extra' },
     { src = 'https://github.com/hrsh7th/nvim-deck' },
   },
   setup = function()
     vim.api.nvim_create_augroup('dotvim.picker', { clear = true })
 
-    require('dotvim.picker.mini')
+    -- nvim-deck は mini.icons を require できればアイコンを表示する
+    require('dotvim._lib.mini').icons()
     require('dotvim.picker.deck')
   end,
 })

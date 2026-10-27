@@ -65,7 +65,7 @@ require('dotvim').setup({ ... })
 |---|---|---|
 | `base` | オプション、キーマップ、autocmd、ユーザーコマンド、nohlsearch / undotree、ui2 | `shell = 'fish'`, `ui2 = true` |
 | `ui` | colorscheme (nordfox)、statusline、fidget、mini.indentscope、nvim-ufo | なし |
-| `picker` | nvim-deck、mini.pick / mini.extra / mini.files | なし |
+| `picker` | nvim-deck | なし |
 | `lsp` | nvim-lspconfig と `vim.lsp.enable`、LspAttach のキーマップ、nvim-treesitter | `servers` (有効にするサーバー名の一覧) |
 | `completion` | nvim-cmp-kit / nvim-ix | なし |
 | `quickfix` | vim-ripgrep (`:Grep`)、vim-toggle-quickfix、vim-qfedit | なし |
