@@ -1,6 +1,4 @@
-vim.pack.add({
-  { src = 'https://github.com/lambdalisue/nvim-aibo' }
-})
+local enabled = require('dotvim._lib.feature').enabled
 
 local aibo = require('aibo')
 
@@ -219,6 +217,7 @@ end
 -- is wired up before user config, so a later `FileType` autocmd for the same
 -- pattern always fires after it -- the standard ftplugin-overrule idiom).
 vim.api.nvim_create_autocmd('FileType', {
+  group = 'dotvim.aibo',
   pattern = 'aibo-*',
   callback = function(ev)
     vim.wo.winfixwidth = true
@@ -235,7 +234,8 @@ vim.api.nvim_create_autocmd('FileType', {
       vim.keymap.set({ 'n', 'i' }, '<PageUp>', '<Plug>(aibo-send)<PageUp>', opts)
       vim.keymap.set({ 'n', 'i' }, '<PageDown>', '<Plug>(aibo-send)<PageDown>', opts)
 
-      if bufname:match('^aiboconsole://claude/') then
+      -- deck のキー操作は picker 機能の DeckStart で設定されるため、picker が無ければ定義しない
+      if bufname:match('^aiboconsole://claude/') and enabled('picker') then
         vim.keymap.set('n', ';s', function()
           open_scratchpad_picker(bufnr)
         end, { buffer = bufnr, silent = true, desc = 'Claude scratchpad files' })
@@ -246,14 +246,14 @@ vim.api.nvim_create_autocmd('FileType', {
       return
     end
 
-    if not bufname:match('^aiboprompt://') then
+    if not bufname:match('^aiboprompt://') or not enabled('completion') then
       return
     end
 
     -- Hand "/" and "@" over to nvim-ix: drop nvim-aibo's own triggers
     -- (<C-x><C-o> / vim.fn.complete()) so the characters just self-insert
     -- and nvim-ix's normal TextChangedI auto-trigger picks them up via the
-    -- aibo-slash / aibo-file sources registered in dotvim.plugins.completion.
+    -- aibo-slash / aibo-file sources registered in dotvim.aibo.
     pcall(vim.keymap.del, 'i', '/', { buffer = bufnr })
     pcall(vim.keymap.del, 'i', '@', { buffer = bufnr })
 
