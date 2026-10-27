@@ -1,4 +1,4 @@
-local pal = require('dotvim.plugins.colorscheme').palette
+local pal = require('dotvim._lib.palette')
 
 local color = {
   normal  = pal.blue.dim,
@@ -11,19 +11,28 @@ local color = {
 local u = require('dotvim._lib.utils')
 local hl_set, hl_link = u.hl_set, u.hl_link
 
-hl_link({ StatusLine = 'Normal' })
-hl_set({
-  StatusLineNormal  = { fg = color.normal,  bg = 'NONE' },
-  StatusLineInsert  = { fg = color.insert,  bg = 'NONE' },
-  StatusLineVisual  = { fg = color.visual,  bg = 'NONE' },
-  StatusLineReplace = { fg = color.replace, bg = 'NONE' },
-  StatusLineCommand = { fg = color.command, bg = 'NONE' },
+local function set_highlights()
+  hl_link({ StatusLine = 'Normal' })
+  hl_set({
+    StatusLineNormal  = { fg = color.normal,  bg = 'NONE' },
+    StatusLineInsert  = { fg = color.insert,  bg = 'NONE' },
+    StatusLineVisual  = { fg = color.visual,  bg = 'NONE' },
+    StatusLineReplace = { fg = color.replace, bg = 'NONE' },
+    StatusLineCommand = { fg = color.command, bg = 'NONE' },
+  })
+end
+
+set_highlights()
+-- :colorscheme はハイライトを初期化するため、後から読み込まれても消えないように再適用する
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = 'dotvim.ui',
+  callback = set_highlights,
 })
 
 local o = vim.opt
 
 o.laststatus = 3
-o.statusline = '%!v:lua.Statusline()'
+o.statusline = "%!v:lua.require'dotvim.ui.statusline'.render()"
 
 ---バッファが保存されていなければtrueを返す
 local function is_buffer_unsave(bufno)
@@ -91,7 +100,7 @@ local components = {
       if vim.startswith(path, 'gin') then
         path = vim.split(path, ';')[1]
       end
-      local icon, hl = require('dotvim.plugins.mini').icons.get('file', path)
+      local icon, hl = require('dotvim._lib.mini').icons().get('file', path)
       return {
         { text = icon, hl = hl },
         { text = path, hl = 'Normal' },
@@ -115,7 +124,9 @@ local function genbar(line_hl)
   end
 end
 
-function _G.Statusline()
+local M = {}
+
+function M.render()
   local bar = genbar(get_line_hl(vim.fn.mode()))
 
   local left_parts = vim.iter(components.left)
@@ -146,3 +157,5 @@ function _G.Statusline()
     :map(function(v) return string.format('%%#%s#%s', v.hl, v.text) end)
     :join(' ')
 end
+
+return M

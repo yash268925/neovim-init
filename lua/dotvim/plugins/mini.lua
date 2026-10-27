@@ -1,12 +1,12 @@
 vim.pack.add({
   { src = 'https://github.com/echasnovski/mini.files' },
-  { src = 'https://github.com/echasnovski/mini.indentscope' },
   { src = 'https://github.com/echasnovski/mini.pick' },
   { src = 'https://github.com/echasnovski/mini.extra' },
   { src = 'https://github.com/echasnovski/mini.diff' },
 })
 
-local icons = require('dotvim._lib.mini').icons()
+-- mini.files は MiniIcons が setup 済みならアイコンを表示する
+require('dotvim._lib.mini').icons()
 
 local files = require('mini.files')
 files.setup({
@@ -41,21 +41,6 @@ files.setup({
   },
 })
 
-local indentscope = require('mini.indentscope')
-indentscope.setup({
-  draw = {
-    delay = 30,
-    animation = function() return 8 end,
-  },
-  symbol = '┆',
-})
-
-vim.api.nvim_create_autocmd('TermOpen', {
-  callback = function(args)
-    vim.b[args.buf].miniindentscope_disable = true
-  end,
-})
-
 local pick = require('mini.pick')
 pick.setup({
   options = {
@@ -72,9 +57,3 @@ diff.setup({
     style = 'sign',
   },
 })
-
-return {
-  icons = icons,
-  pick = pick,
-  extra = extra,
-}

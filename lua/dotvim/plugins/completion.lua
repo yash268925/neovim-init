@@ -29,7 +29,7 @@ vim.pack.add({
 local kinds = require('cmp-kit.kit.LSP').CompletionItemKind
 local kinds_lookup = {}
 
-local icons = require('dotvim.plugins.mini').icons
+local icons = require('dotvim._lib.mini').icons()
 
 for k, v in pairs(kinds) do
   local kind = k
