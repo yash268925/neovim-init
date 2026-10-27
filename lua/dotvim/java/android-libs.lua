@@ -76,8 +76,9 @@ function M.build_cmd(root_dir, module_dir)
   }
 end
 
--- 停止を待たずに start すると、start_or_attach が停止中の古いクライアントに
--- アタッチしてしまう。
+-- 新しい jdtls は同じ -data の workspace を使うため、旧プロセスが終了するまで
+-- start を待つ。is_stopped() は stop() の直後から true になり、終了の判定に
+-- 使えない。クライアントはプロセス終了後に get_client_by_id から消える。
 ---@param clients vim.lsp.Client[]
 ---@param on_stopped fun()
 local function stop_clients(clients, on_stopped)
@@ -87,7 +88,7 @@ local function stop_clients(clients, on_stopped)
   local waited = 0
   local function poll()
     local all_stopped = vim.iter(clients):all(function(client)
-      return client:is_stopped()
+      return vim.lsp.get_client_by_id(client.id) == nil
     end)
     if all_stopped or waited >= 10000 then
       on_stopped()
