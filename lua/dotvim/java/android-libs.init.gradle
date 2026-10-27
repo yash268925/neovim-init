@@ -3,7 +3,7 @@
 //
 // 通常は nvim の :JdtlsAndroidLibs [module ...] から実行する。このファイルの場所や
 // 以下のプロパティを意識する必要はない。build.gradle の依存を変えたら再実行する。
-// variant は .nvim.lua の vim.g.dotvim_jdtls.android から、R.jar の事前生成
+// variant は .nvim.lua の vim.g.dotvim_jdtls.android から取り、R.jar の事前生成
 // (process<Variant>Resources)、.classpath の再生成、jdtls の再起動もまとめて行う。
 //
 // プロパティ:

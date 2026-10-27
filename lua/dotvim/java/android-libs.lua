@@ -1,6 +1,3 @@
--- :JdtlsAndroidLibs の本体。Android モジュールの依存 JAR 一覧を Gradle で生成し、
--- そのモジュールの jdtls を作り直す。
-
 local jdtls = require('dotvim.java.jdtls')
 
 local M = {}
