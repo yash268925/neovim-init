@@ -17,11 +17,16 @@ gradle.projectsEvaluated {
         if (!isAndroid) {
             return
         }
-        p.tasks.register('jdtlsLibs') {
+        // 対象バリアント(build type / flavor)。既定は debug。
+        // 例: -Pjdtls.variant=demoDebug
+        def variant = (p.findProperty('jdtls.variant') ?: 'debug').toString()
+        def processResources = "process${variant.capitalize()}Resources".toString()
+        p.tasks.register('jdtlsLibs') { task ->
+            task.notCompatibleWithConfigurationCache('doLast で Project を参照する')
+            // コマンドラインの並び順だけでは、configuration cache 有効時に R.jar の
+            // 生成より先に実行されうる。
+            task.mustRunAfter(p.tasks.matching { it.name == processResources })
             doLast {
-                // 対象バリアント(build type / flavor)。既定は debug。
-                // 例: -Pjdtls.variant=demoDebug
-                def variant = (p.findProperty('jdtls.variant') ?: 'debug').toString()
                 def lines = []
 
                 // android.jar(コンパイルSDKのブートクラスパス)。
@@ -50,7 +55,13 @@ gradle.projectsEvaluated {
                 def rJarDir = new File(p.layout.buildDirectory.get().asFile, "intermediates/compile_and_runtime_r_class_jar/${variant}")
                 def rJars = rJarDir.exists() ? p.fileTree(dir: rJarDir, include: '**/R.jar').files : []
                 if (rJars.empty) {
-                    logger.warn("jdtlsLibs: R.jar が見つかりません(${rJarDir})。./gradlew :${p.name}:process${variant.capitalize()}Resources を先に実行してください。")
+                    def processTask = p.tasks.findByName(processResources)
+                    if (processTask != null && gradle.taskGraph.hasTask(processTask)) {
+                        logger.warn("jdtlsLibs: ${processResources} の実行後も R.jar が見つかりません(${rJarDir})。")
+                    } else {
+                        def taskPath = p.path == ':' ? ":${processResources}" : "${p.path}:${processResources}"
+                        logger.warn("jdtlsLibs: R.jar が見つかりません(${rJarDir})。${taskPath} を同じ実行に含めてください。")
+                    }
                 }
                 rJars.each { lines << it.absolutePath }
 
