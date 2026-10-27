@@ -1,1 +1,16 @@
-require('dotvim')
+require('dotvim').setup({
+  base = true,
+  ui = true,
+  picker = true,
+  lsp = true,
+  completion = true,
+  quickfix = true,
+  skk = true,
+  git = true,
+  aibo = true,
+  java = true,
+  ['term-edit'] = true,
+  ['color-picker'] = true,
+  ['md-render'] = true,
+  ['ja-doc'] = true,
+})
