@@ -1,6 +1,4 @@
 vim.pack.add({
-  { src = 'https://github.com/echasnovski/mini.icons' },
-  { src = 'https://github.com/echasnovski/mini.bufremove' },
   { src = 'https://github.com/echasnovski/mini.files' },
   { src = 'https://github.com/echasnovski/mini.indentscope' },
   { src = 'https://github.com/echasnovski/mini.pick' },
@@ -8,11 +6,9 @@ vim.pack.add({
   { src = 'https://github.com/echasnovski/mini.diff' },
 })
 
-local icons = require('mini.icons')
-icons.setup()
-
-local bufremove = require('mini.bufremove')
-bufremove.setup()
+local lib_mini = require('dotvim._lib.mini')
+local icons = lib_mini.icons()
+local bufremove = lib_mini.bufremove()
 
 local files = require('mini.files')
 files.setup({

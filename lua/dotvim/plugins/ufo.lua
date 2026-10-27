@@ -18,7 +18,7 @@ ufo.setup({
   end
 })
 
-local keymaps = require('dotvim.utils').keymaps
+local keymaps = require('dotvim._lib.utils').keymaps
 
 keymaps({
   { 'n', 'zR', ufo.openAllFolds },

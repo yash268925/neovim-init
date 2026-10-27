@@ -1,4 +1,4 @@
-local hl_link = require('dotvim.utils').hl_link
+local hl_link = require('dotvim._lib.utils').hl_link
 
 hl_link({
   CmpKitMarkdownAnnotateUnderlined = 'Special',
@@ -83,7 +83,7 @@ ix.setup({
   },
 })
 
-local keymaps = require('dotvim.utils').keymaps
+local keymaps = require('dotvim._lib.utils').keymaps
 
 keymaps({
   { { 'i', 'c', 's' }, '<C-d>',     ix.action.scroll(0 + 3) },

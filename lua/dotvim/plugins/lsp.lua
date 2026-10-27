@@ -17,7 +17,7 @@ vim.lsp.enable({
   'phpactor',
 })
 
-local keymaps = require('dotvim.utils').keymaps
+local keymaps = require('dotvim._lib.utils').keymaps
 
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(args)

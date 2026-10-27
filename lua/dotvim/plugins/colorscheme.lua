@@ -1,5 +1,5 @@
 vim.pack.add({
-  { src = 'https://github.com/EdenEast/nightfox.nvim' },
+  require('dotvim._lib.specs').nightfox,
 })
 
 require('nightfox').setup({
@@ -18,5 +18,5 @@ vim.o.winblend = 0
 vim.cmd.colorscheme('nordfox')
 
 return {
-  palette = require('nightfox.palette').load('nordfox')
+  palette = require('dotvim._lib.palette')
 }

@@ -4,7 +4,7 @@ vim.pack.add({
   { src = 'https://github.com/lambdalisue/vim-gin' },
 })
 
-local palette = require('dotvim.plugins.colorscheme').palette
+local palette = require('dotvim._lib.palette')
 
 local fg_color = palette.fg3
 

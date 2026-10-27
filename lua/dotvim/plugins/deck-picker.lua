@@ -353,7 +353,7 @@ deck.register_start_preset({
   end,
 })
 
-local keymaps = require('dotvim.utils').keymaps
+local keymaps = require('dotvim._lib.utils').keymaps
 
 keymaps({
   { 'n', ';b', '<Cmd>Deck buffers<CR>' },

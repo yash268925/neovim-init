@@ -332,7 +332,7 @@ local function toggle_claude(args)
   end
 end
 
-local keymaps = require('dotvim.utils').keymaps
+local keymaps = require('dotvim._lib.utils').keymaps
 
 keymaps({
   { 'n', ';c', function() toggle_claude() end },

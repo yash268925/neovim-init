@@ -8,7 +8,7 @@ local color = {
   command = pal.yellow.base,
 }
 
-local u = require('dotvim.utils')
+local u = require('dotvim._lib.utils')
 local hl_set, hl_link = u.hl_set, u.hl_link
 
 hl_link({ StatusLine = 'Normal' })

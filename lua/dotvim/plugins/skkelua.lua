@@ -26,7 +26,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
   end,
 })
 
-local keymaps = require('dotvim.utils').keymaps
+local keymaps = require('dotvim._lib.utils').keymaps
 
 keymaps({
   { { 'i', 'c', 't' }, '<M-j>', '<Plug>(skkelua-toggle)' },
